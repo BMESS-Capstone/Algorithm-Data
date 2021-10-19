@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <math.h>
+#include <BasicLinearAlgebra.h>
 
 // Change this when I know a real value
 const int incidentIntensity = 750;
@@ -15,11 +16,34 @@ int oDChange[];
 int outputConc[];
 
 // Wavelength constants in nanometers
-const int hemoWave = 760;
-const int deoxyHemoWave = 860;
+const int HbWave = 760;
+const int Hb02Wave = 860;
 
-// Distance between diodes in meters
-const int optDist;
+// Channel that we care about
+// u is for Hb
+// w is for Hb02
+const int uChannel = 4;
+const int wChannel = 6;
+
+// Distance between diodes in centimeters
+const int optDist = 2;
+
+// Extinction coefficent matrix
+// These are estimates by interpolation to get us started ***
+// Units in (mM-1 * cm-1)
+// [0, 0] = extinction of Hb at lambda 1
+// [0, 1] = extinction of HbO2 at lambda 1
+// [1, 0] = extinction of Hb at lambda 2
+// [1, 1] = extinction of HbO2 at lambda 2
+const BLA::Matrix<2,2> extCoeff = {0.38,0.14,0.18,0.30};
+
+// Pathlength difference
+// We can assume it is a constant as it should not change reading that much
+const double pathLengthDelta = 1;
+
+// Differential pathlength factor
+// Still need to figure this out
+const double DPF = 1;
 
 void setup()
 {
@@ -101,7 +125,17 @@ void calculateODdelta()
     {
         oDChange[i] = oDCurrent[i] - oDLast[i];
     }
-
+    
+    
 }
+BLA::Matrix<1,2> calcExtinctionMatrix(){
+    //get the constant
+    double frontCoeff = 1/(DPF * pathLengthDelta);
 
+    //change the two OD results we care about into a matrix
+    BLA::Matrix<2,1> oDMatrix = {oDChange[HbWave],oDChange[Hb02Wave]};
 
+    //get matrix multiplication result
+    BLA::Matrix<2,1> result = BLA::Inverse<2,2,double>(extCoeff);
+
+};
