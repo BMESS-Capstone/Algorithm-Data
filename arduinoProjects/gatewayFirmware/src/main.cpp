@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <math.h>
 #include <BasicLinearAlgebra.h>
+#include <../lib/BasicLinearAlgebra-master/impl/NotSoBasicLinearAlgebra.h>
 
 // Change this when I know a real value
 const int incidentIntensity = 750;
@@ -13,7 +14,7 @@ int oDLast[];
 int oDChange[];
 
 // Ouput array for the changes in concentration and intensity
-int outputConc[];
+int outputConc[50][2];
 
 // Wavelength constants in nanometers
 const int HbWave = 760;
@@ -45,13 +46,13 @@ const double pathLengthDelta = 1;
 // Still need to figure this out
 const double DPF = 1;
 
+// The variable for the measurements of the concentration changes
+float concHb;
+float concHbO2;
+
 void setup()
 {
     delay(1000);
-    pinMode(11, INPUT);
-    pinMode(12, OUTPUT);
-    digitalRead(11);
-    digitalWrite(12, HIGH);
     Serial.begin(9600);
 
     // Initialize the arrays
@@ -60,7 +61,6 @@ void setup()
     int oDCurrent[] = {0, 0, 0, 0, 0, 0};
     int oDLast[] = {0, 0, 0, 0, 0, 0};
     int oDChange[] = {0, 0, 0, 0, 0, 0};
-    int outputCon[50];
 }
 
 void loop()
@@ -128,6 +128,7 @@ void calculateODdelta()
     
     
 }
+
 BLA::Matrix<1,2> calcExtinctionMatrix(){
     //get the constant
     double frontCoeff = 1/(DPF * pathLengthDelta);
@@ -136,6 +137,24 @@ BLA::Matrix<1,2> calcExtinctionMatrix(){
     BLA::Matrix<2,1> oDMatrix = {oDChange[HbWave],oDChange[Hb02Wave]};
 
     //get matrix multiplication result
-    BLA::Matrix<2,1> result = BLA::Inverse<2,2,double>(extCoeff);
+    BLA::Matrix<2,1> result = BLA::Inverse(extCoeff) * oDMatrix * frontCoeff;
 
-};
+    //assigning the first result to ConcHb
+    concHb = result(0,0);
+
+    //assigning the second result to concHbO2
+    concHbO2 = result(1,0);
+}
+
+void updateOutput(){
+    //Adding to the Matrix of outputCon
+    for(int i; i<50, i++){
+        if(outputConc[i][0]==0){
+            outputConc[i][0] = concHb;
+            outputConc[i][1] = concHbO2;
+        }
+        else if(i==49 && outputConc[i][1]==0){
+            //Signal an interupt and output!!
+        }
+    }
+}

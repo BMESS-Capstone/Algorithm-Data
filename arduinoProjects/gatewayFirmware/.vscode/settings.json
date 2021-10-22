@@ -11,9 +11,9 @@
   "C_Cpp_Runner.includePaths": [
     "/Users/jeffroszell/Documents/School/Capstone/Arduino Code/arduinoProjects/gatewayFirmware/include",
     "/Users/jeffroszell/Documents/School/Capstone/Arduino Code/arduinoProjects/gatewayFirmware/src",
+    "/Users/jeffroszell/Documents/School/Capstone/Arduino Code/arduinoProjects/gatewayFirmware/lib/BasicLinearAlgebra-master",
     "/Users/jeffroszell/.platformio/packages/framework-arduino-avr/cores/arduino",
     "/Users/jeffroszell/.platformio/packages/framework-arduino-avr/variants/standard",
-    "/Users/jeffroszell/Documents/School/Capstone/Arduino Code/arduinoProjects/gatewayFirmware/lib/BasicLinearAlgebra-master",
     "/Users/jeffroszell/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
     "/Users/jeffroszell/.platformio/packages/framework-arduino-avr/libraries/HID/src",
     "/Users/jeffroszell/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
