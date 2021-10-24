@@ -148,7 +148,7 @@ BLA::Matrix<1,2> calcExtinctionMatrix(){
 
 void updateOutput(){
     //Adding to the Matrix of outputCon
-    for(int i; i<50, i++){
+    for(int i; i<50; i++){
         if(outputConc[i][0]==0){
             outputConc[i][0] = concHb;
             outputConc[i][1] = concHbO2;
