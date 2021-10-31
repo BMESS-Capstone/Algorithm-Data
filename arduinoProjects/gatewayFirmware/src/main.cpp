@@ -13,8 +13,8 @@ int oDCurrent[];
 int oDLast[];
 int oDChange[];
 
-// Ouput array for the changes in concentration and intensity
-int outputConc[50][2];
+// Output array for the changes in concentration and intensity
+int outputStO2[50];
 
 // Wavelength constants in nanometers
 const int HbWave = 760;
@@ -50,6 +50,11 @@ const double DPF = 1;
 float concHb;
 float concHbO2;
 
+// Output counter, keeps track of when to signal the send function
+int queueCount = 0;
+
+//********************Standard Code Block***************************
+
 void setup()
 {
     delay(1000);
@@ -67,6 +72,8 @@ void loop()
 {
     // put your main code here, to run repeatedly:
 }
+
+//*******************End of Code Block******************************
 
 void initializeIntensities(){
     for (int i = 0; i < 6; i++)
@@ -100,7 +107,7 @@ void inputFilter()
 
 void calculateODdelta()
 {
-    //Last Optical Density
+    //last Optical Density
     for (int i = 0; i < 6; i++)
     {
         if (lastIntensityArray[i] != 0)
@@ -110,7 +117,7 @@ void calculateODdelta()
         else
             oDLast[i] = 0;
     }
-    //Current Optical Density
+    //turrent Optical Density
     for (int i = 0; i < 6; i++)
     {
         if (oDCurrent[i] != 0)
@@ -120,7 +127,7 @@ void calculateODdelta()
         else
             oDCurrent[i] = 0;
     }
-    //The change in optical density
+    //the change in optical density
     for (int i = 0; i < 6; i++)
     {
         oDChange[i] = oDCurrent[i] - oDLast[i];
@@ -147,14 +154,20 @@ BLA::Matrix<1,2> calcExtinctionMatrix(){
 }
 
 void updateOutput(){
-    //Adding to the Matrix of outputCon
-    for(int i; i<50; i++){
-        if(outputConc[i][0]==0){
-            outputConc[i][0] = concHb;
-            outputConc[i][1] = concHbO2;
-        }
-        else if(i==49 && outputConc[i][1]==0){
-            //Signal an interupt and output!!
-        }
+    //adding new output entry
+    if(queueCount<50){
+        outputStO2[queueCount] = (concHbO2)/(concHb + concHbO2);
     }
+    elif(queueCount>=50){
+        sendUpdate();
+        queueCount = 0;
+        outputStO2[queueCount] = (concHbO2)/(concHb + concHbO2);
+    }
+
+    queueCount++;
+
+}
+
+sendUpdate(){
+    //write the implementation of the send function here.
 }
