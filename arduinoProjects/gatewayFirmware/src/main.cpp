@@ -1,7 +1,23 @@
 #include <Arduino.h>
+
+// Math libraries
 #include <math.h>
 #include <BasicLinearAlgebra.h>
 #include <../lib/BasicLinearAlgebra-master/impl/NotSoBasicLinearAlgebra.h>
+
+// Bluetooth
+#include "BluetoothSerial.h"
+
+#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
+#error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
+#endif
+
+BluetoothSerial SerialBT;
+
+// Input parser for csv types
+#include <CSV_Parser.h>
+
+CSV_Parser cp(csv_str, /*format*/ "sLdcfx-");
 
 // Change this when I know a real value
 const int incidentIntensity = 750;
@@ -58,7 +74,8 @@ int queueCount = 0;
 void setup()
 {
     delay(1000);
-    Serial.begin(9600);
+    Serial.begin(115200);
+    SerialBT.begin("ESP32test");
 
     // Initialize the arrays
     int currentIntensityArray[] = {0, 0, 0, 0, 0, 0};
@@ -70,7 +87,18 @@ void setup()
 
 void loop()
 {
-    // put your main code here, to run repeatedly:
+    // Checks for outgoing info in the bluetooth pipe to be sent
+    if (Serial.available()) {
+      SerialBT.write(Serial.read());
+    }
+
+    // Checks for incoming info in the bluetooth pipe to be received
+    if (SerialBT.available()) {
+      Serial.write(SerialBT.read());
+    }
+
+    // Now to write a script to deal with incoming
+
 }
 
 //*******************End of Code Block******************************
