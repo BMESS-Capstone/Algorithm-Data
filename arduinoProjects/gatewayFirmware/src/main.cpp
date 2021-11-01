@@ -121,7 +121,6 @@ void readIntensities()
         lastIntensityArray[i] = currentIntensityArray[i];
         currentIntensityArray[i] = Serial.parseInt();
     }
-    
 }
 
 void inputFilter()
@@ -186,7 +185,7 @@ void updateOutput(){
     if(queueCount<50){
         outputStO2[queueCount] = (concHbO2)/(concHb + concHbO2);
     }
-    elif(queueCount>=50){
+    else if(queueCount>=50){
         sendUpdate();
         queueCount = 0;
         outputStO2[queueCount] = (concHbO2)/(concHb + concHbO2);
@@ -196,6 +195,10 @@ void updateOutput(){
 
 }
 
-sendUpdate(){
+void sendUpdate(){
     //write the implementation of the send function here.
+}
+
+void receiveUpdate(){
+    //write the implementation of the receive function here.
 }
