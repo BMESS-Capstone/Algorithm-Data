@@ -27,5 +27,6 @@
   "C_Cpp_Runner.excludeSearch": [],
   "C_Cpp_Runner.enableWarnings": true,
   "C_Cpp_Runner.warningsAsError": false,
-  "C_Cpp.errorSquiggles": "Enabled"
+  "C_Cpp.errorSquiggles": "Enabled",
+  "cmake.sourceDirectory": "${workspaceFolder}/lib/BasicLinearAlgebra-master/test"
 }

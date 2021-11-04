@@ -33,7 +33,7 @@ int oDChange[];
 int outputStO2[50];
 
 // Wavelength constants in nanometers
-const int HbWave = 780;
+const int HbWave = 760;
 const int Hb02Wave = 860;
 
 // Channel that we care about
