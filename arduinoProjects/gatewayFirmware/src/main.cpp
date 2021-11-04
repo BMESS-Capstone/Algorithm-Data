@@ -33,7 +33,7 @@ int oDChange[];
 int outputStO2[50];
 
 // Wavelength constants in nanometers
-const int HbWave = 760;
+const int HbWave = 780;
 const int Hb02Wave = 860;
 
 // Channel that we care about
@@ -144,7 +144,7 @@ void calculateODdelta()
         else
             oDLast[i] = 0;
     }
-    //turrent Optical Density
+    //current Optical Density
     for (int i = 0; i < 6; i++)
     {
         if (oDCurrent[i] != 0)
