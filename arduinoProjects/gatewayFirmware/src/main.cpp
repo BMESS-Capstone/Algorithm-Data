@@ -18,14 +18,8 @@
 
 BluetoothSerial SerialBT;
 
-//Change to false ***
+// Change to false ***
 bool initial = true;
-
-//****************************************************************
-
-char *dummyIntensity[4] = {"100,124,142,643,121,543","100,124,142,543,121,643","100,124,142,843,121,443","100,124,142,743,121,543"};
-
-//****************************************************************
 
 //********************Standard Code Block***************************
 
@@ -38,40 +32,32 @@ void setup()
 
 void loop()
 {
+    int StO2entry = 0;
     while (1)
     {
-        int StO2entry = 0;
-
         // Now to write a script to deal with incoming
 
         // 1. Read first two inputs and chuck them off a cliff
-        #ifndef 0
-        int chuckCount = 0;
-        while (chuckCount < 2)
+        if (initial == true)
         {
-            if (SerialBT.available())
+            int discardCount = 0;
+            while (discardCount < 2)
             {
-                Serial.write(SerialBT.read());
+                if (SerialBT.available())
+                {
+                    Serial.write(SerialBT.read());
+                }
+                int s = SerialBT.read();
+                discardCount++;
             }
-            int s = SerialBT.read();
-            chuckCount++;
+            initial = false;
         }
-        #endif
 
         // 2. First Reading needs to go to the current intensity,
         // and shift readings to the last
-        if (initial == false)
-        {
-            readIntoIntArray();
-            currentToLast();
-            initial = true;
-        }
 
-        // Temporary
-        for(int i = 0; i < 6;i++){
-            dummyIntensity[0][i] = lastIntensityArray[i];
-            dummyIntensity[1][i] = currentIntensityArray[i];
-        }
+        receiveUpdate();
+        currentToLast();
 
         // 3. Now you can start the normal loop
         // Preprocess
@@ -98,7 +84,7 @@ void loop()
 void readIntoIntArray()
 {
     int entryNum = 0;
-    char *s = (char *)SerialBT.read();
+    char *s = (char *)Serial.read();
     for (int i = 0; i < strlen(s); i++)
     {
         if (s[i] == ',')
@@ -109,5 +95,4 @@ void readIntoIntArray()
         entryNum++;
     }
 }
-
 //*******************End of Code Block******************************

@@ -1,7 +1,6 @@
 // Math libraries
 #include <math.h>
 #include <BasicLinearAlgebra.h>
-#include <../lib/BasicLinearAlgebra-master/impl/NotSoBasicLinearAlgebra.h>
 
 // Change this when I know a real value
 const float incidentIntensity = 750;
@@ -15,7 +14,7 @@ float oDLast[] = {0, 0, 0, 0, 0, 0};
 float oDChange[] = {0, 0, 0, 0, 0, 0};
 
 // Output array for the changes in concentration and intensity
-float outputStO2[50];
+float outputStO2[20];
 
 // Wavelength constants in nanometers
 int HbWave = 760;
@@ -115,11 +114,11 @@ BLA::Matrix<1, 2> calcConc()
 void updateOutput()
 {
     // adding new output entry
-    if (queueCount < 50)
+    if (queueCount < 20)
     {
         outputStO2[queueCount] = (concHbO2) / (concHb + concHbO2);
     }
-    else if (queueCount >= 50)
+    else if (queueCount >= 20)
     {
         sendUpdate();
         queueCount = 0;
@@ -131,20 +130,20 @@ void updateOutput()
 
 void sendUpdate()
 {
-    // // Checks for outgoing info in the bluetooth pipe to be sent
-    // if (Serial.available())
-    // {
-    //     SerialBT.write(Serial.read());
-    // }
+    // This is where we will write the 20 entries to the outgoing HTTP Post
 }
 
 void receiveUpdate()
 {
-    // // Checks for incoming info in the bluetooth pipe to be received
-    // if (SerialBT.available())
-    // {
-    //     Serial.write(SerialBT.read());
-    // }
+    // Checks for incoming info in the bluetooth pipe to be received
+    if (SerialBT.available())
+    {
+        while (SerialBT.available())
+        {
+            Serial.write(SerialBT.read());
+        }
+        readIntoIntArray();
+    }
 }
 
 void currentToLast()
