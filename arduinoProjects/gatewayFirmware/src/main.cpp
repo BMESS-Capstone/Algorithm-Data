@@ -12,6 +12,25 @@
 // Algorithm
 #include "algo.h"
 
+// Booleans to decide which output method to use
+// Might have to hardcode one to be true until the hardware switch is built
+bool WiFiCON = false;
+bool SatCON = false;
+bool CellCON = false;
+
+// Wifi Settings
+#include <WiFi.h>
+#include <HTTPClient.h>
+const char *ssid = "NetworkName";
+const char *password = "Password";
+
+// Cell Settings
+
+// Sat Settings
+
+// Server Settings
+String serverName = "the Server Address... Replace this";
+
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
@@ -20,6 +39,8 @@ BluetoothSerial SerialBT;
 
 // Change to false ***
 bool initial = true;
+
+int StO2entry = 0;
 
 //********************Standard Code Block***************************
 
@@ -32,50 +53,62 @@ void setup()
 
 void loop()
 {
-    int StO2entry = 0;
-    while (1)
+    // Case 1 - Wifi output connetion
+    if (WiFiCON == true)
     {
-        // Now to write a script to deal with incoming
-
-        // 1. Read first two inputs and chuck them off a cliff
-        if (initial == true)
+        WiFi.begin(ssid, password);
+        while (WiFi.status() != WL_CONNECTED)
         {
-            int discardCount = 0;
-            while (discardCount < 2)
-            {
-                if (SerialBT.available())
-                {
-                    Serial.write(SerialBT.read());
-                }
-                int s = SerialBT.read();
-                discardCount++;
-            }
-            initial = false;
+            delay(1000);
         }
+        if (WiFi.status() == WL_CONNECTED)
+        {
+            HTTPClient http;
 
-        // 2. First Reading needs to go to the current intensity,
-        // and shift readings to the last
+            // You'll have to change to url/address you want
+            http.begin(serverName);
+            http.addHeader("Content-Type", "text/plain");
 
-        receiveUpdate();
-        currentToLast();
+            // You might have to change this
+            String toSend = fullLoop();
 
-        // 3. Now you can start the normal loop
-        // Preprocess
-        inputFilter();
-        std::cout << currentIntensityArray[0] << std::endl;
+            int httpResponseCode = http.POST(toSend);
 
-        // 4. Calculate the oDChange
-        calculateODdelta();
-        std::cout << oDChange[3] << " some space " << oDChange[5] << std::endl;
+            if (httpResponseCode > 0)
+            {
 
-        // 5. Calculate the concentrations
-        calcConc();
+                String response = http.getString();
 
-        // 6. Update the output values and send if needed
-        updateOutput();
-        std::cout << outputStO2[0] << std::endl;
+                Serial.println("httpResponseCode");
+                Serial.println(response);
+            }
+            else
+            {
+                Serial.println("Error on send");
+                Serial.println("httpResponseCode");
+            }
+            http.end();
+        }
+    }
 
-        StO2entry++;
+    // Case 2 - Cellular output connection
+    else if (CellCON == true)
+    {
+
+        fullLoop();
+    }
+
+    // Case 3 - Satellite output connection
+    else if (SatCON == true)
+    {
+
+        fullLoop();
+    }
+
+    // Case 4 - No output connection
+    else
+    {
+        Serial.println("No connection to Internet");
     }
 }
 

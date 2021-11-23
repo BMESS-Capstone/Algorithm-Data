@@ -120,7 +120,6 @@ void updateOutput()
     }
     else if (queueCount >= 20)
     {
-        sendUpdate();
         queueCount = 0;
         outputStO2[queueCount] = (concHbO2) / (concHb + concHbO2);
     }
@@ -152,4 +151,56 @@ void currentToLast()
     {
         currentIntensityArray[i] = lastIntensityArray[i];
     }
+}
+
+String fullLoop(){
+    String output = "";
+    while (StO2entry<20)
+    {
+        // Now to write a script to deal with incoming
+
+        // 1. Read first two inputs and chuck them off a cliff
+        if (initial == true)
+        {
+            int discardCount = 0;
+            while (discardCount < 2)
+            {
+                if (SerialBT.available())
+                {
+                    Serial.write(SerialBT.read());
+                }
+                int s = SerialBT.read();
+                discardCount++;
+            }
+            initial = false;
+        }
+
+        // 2. First Reading needs to go to the current intensity,
+        // and shift readings to the last
+
+        receiveUpdate();
+        currentToLast();
+
+        // 3. Now you can start the normal loop
+        // Preprocess
+        inputFilter();
+
+        // 4. Calculate the oDChange
+        calculateODdelta();
+
+        // 5. Calculate the concentrations
+        calcConc();
+
+        // 6. Update the output values and send if needed
+        updateOutput();
+
+        // 7. Concatenates the results into a single string
+        output += ("%f, ",outputStO2[StO2entry]);
+
+        StO2entry++;
+    }
+    //Restarts count for next round
+    StO2entry = 0;
+    //Returns the String which is 20 readings
+    return output;
 }
