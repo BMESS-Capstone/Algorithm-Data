@@ -1,6 +1,7 @@
 // Math libraries
 #include <math.h>
 #include <BasicLinearAlgebra.h>
+#include <ctime>
 
 // Change this when I know a real value
 const float incidentIntensity = 750;
@@ -43,8 +44,10 @@ const BLA::Matrix<2, 2> extCoeff = {0.38, 0.14, 0.18, 0.30};
 const float pathLengthDelta = 1;
 
 // Differential pathlength factor
-// Still need to figure this out
-const float DPF = 1;
+// These are estimates which were interpolated from the research
+// To make these more accurate we would have to compute them
+// 4.38 corresponds to HbWave, and 3.94 corresponds to HbO2Wave
+const float DPF[2] = {4.38, 3.94};
 
 // The variable for the measurements of the concentration changes
 float concHb;
@@ -96,13 +99,20 @@ void calculateODdelta()
 BLA::Matrix<1, 2> calcConc()
 {
     // get the constant
-    double frontCoeff = 1 / (DPF * pathLengthDelta);
+    double frontCoeff = 1 / (pathLengthDelta);
 
     // change the two OD results we care about into a matrix
     BLA::Matrix<2, 1> oDMatrix = {oDChange[HbWave], oDChange[Hb02Wave]};
 
+    // compute the inverse matrix inputs
+    BLA::Matrix<2, 2> inputMatrix = {
+        (extCoeff(0,0) * DPF[0]),
+        (extCoeff(0,1) * DPF[0]),
+        (extCoeff(1,0) * DPF[1]),
+        (extCoeff(1,1) * DPF[1])};
+
     // get matrix multiplication result
-    BLA::Matrix<2, 1> result = BLA::Inverse(extCoeff) * oDMatrix * frontCoeff;
+    BLA::Matrix<2, 1> result = BLA::Inverse(inputMatrix) * oDMatrix * frontCoeff;
 
     // assigning the first result to ConcHb
     concHb = result(0, 0);
@@ -153,9 +163,10 @@ void currentToLast()
     }
 }
 
-String fullLoop(){
+String fullLoop()
+{
     String output = "";
-    while (StO2entry<20)
+    while (StO2entry < 20)
     {
         // Now to write a script to deal with incoming
 
@@ -195,12 +206,30 @@ String fullLoop(){
         updateOutput();
 
         // 7. Concatenates the results into a single string
-        output += ("%f, ",outputStO2[StO2entry]);
+        output += ("%f, ", outputStO2[StO2entry]);
+
+        // 8. Add timestamps to the output
+        output += (getDateAndTime() + ", ");
 
         StO2entry++;
     }
-    //Restarts count for next round
+    // Restarts count for next round
     StO2entry = 0;
-    //Returns the String which is 20 readings
+    // Returns the String which is 20 readings
     return output;
+}
+
+// Helper for the date and time
+String getDateAndTime()
+{
+    time_t curr_time;
+    tm *curr_tm;
+
+    time(&curr_time);
+    curr_tm = localtime(&curr_time);
+    char time[100];
+
+    strftime(time, 50, "%T", curr_tm);
+    String toReturn = time;
+    return toReturn;
 }
