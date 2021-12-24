@@ -14,19 +14,25 @@
 
 // Booleans to decide which output method to use
 // Might have to hardcode one to be true until the hardware switch is built
-bool WiFiCON = false;
-bool SatCON = false;
-bool CellCON = false;
+bool isWifiConnected = false;
+bool isSatConnected = false;
+bool isCellConnected = false;
 
 // Wifi Settings
+#include "WifiCON.h"
 #include <WiFi.h>
 #include <HTTPClient.h>
 const char *ssid = "NetworkName";
 const char *password = "Password";
+WifiCON WFCon;
 
 // Cell Settings
+#include "CellCON.h"
+CellCON CLCon;
 
 // Sat Settings
+#include "SatCON.h"
+SatCON STCon;
 
 // Server Settings
 String serverName = "the Server Address... Replace this";
@@ -49,83 +55,40 @@ void setup()
     delay(1000);
     Serial.begin(115200);
     SerialBT.begin("ESP32test");
+
+    // Objects of each connection typede
+    WFCon = WifiCON(ssid,password);
+    SatCON STCon = SatCON();
+    CellCON CLCon = CellCON();
 }
 
 void loop()
 {
+    // Do a loop until storage is full
+    String message = fullLoop();
+
     // Case 1 - Wifi output connetion
-    if (WiFiCON == true)
-    {
-        WiFi.begin(ssid, password);
-        while (WiFi.status() != WL_CONNECTED)
-        {
-            delay(1000);
-        }
-        if (WiFi.status() == WL_CONNECTED)
-        {
-            HTTPClient http;
-
-            // You'll have to change to url/address you want
-            http.begin(serverName);
-            http.addHeader("Content-Type", "text/plain");
-
-            // You might have to change this
-            String toSend = fullLoop();
-
-            int httpResponseCode = http.POST(toSend);
-
-            if (httpResponseCode > 0)
-            {
-
-                String response = http.getString();
-
-                Serial.println("httpResponseCode");
-                Serial.println(response);
-            }
-            else
-            {
-                Serial.println("Error on send");
-                Serial.println("httpResponseCode");
-            }
-            http.end();
-        }
+    if (isWifiConnected == true){
+        // Send the message
+        WFCon.send(message);
     }
 
     // Case 2 - Cellular output connection
-    else if (CellCON == true)
+    else if (isCellConnected == true)
     {
-
-        fullLoop();
+        CLCon.send(message);
     }
 
     // Case 3 - Satellite output connection
-    else if (SatCON == true)
+    else if  (isSatConnected == true)
     {
-
-        fullLoop();
+        STCon.send(message);
     }
 
     // Case 4 - No output connection
     else
     {
         Serial.println("No connection to Internet");
-    }
-}
-
-// Helpers
-
-void readIntoIntArray()
-{
-    int entryNum = 0;
-    char *s = (char *)Serial.read();
-    for (int i = 0; i < strlen(s); i++)
-    {
-        if (s[i] == ',')
-        {
-            i++;
-        }
-        currentIntensityArray[entryNum] = s[i];
-        entryNum++;
     }
 }
 //*******************End of Code Block******************************
