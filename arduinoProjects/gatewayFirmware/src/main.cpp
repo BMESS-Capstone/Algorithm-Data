@@ -12,11 +12,12 @@
 // Algorithm
 #include "algo.h"
 
-// Booleans to decide which output method to use
-// Might have to hardcode one to be true until the hardware switch is built
-bool isWifiConnected = false;
-bool isSatConnected = false;
-bool isCellConnected = false;
+// Communication case variable
+// 1 is wifi connection
+// 2 is cell connection
+// 3 is satellite connection
+// Default is no connection
+int var = 0;
 
 // Wifi Settings
 #include "WifiCON.h"
@@ -58,8 +59,8 @@ void setup()
 
     // Objects of each connection typede
     WFCon = WifiCON(ssid,password);
-    SatCON STCon = SatCON();
-    CellCON CLCon = CellCON();
+    STCon = SatCON();
+    CLCon = CellCON();
 }
 
 void loop()
@@ -67,28 +68,31 @@ void loop()
     // Do a loop until storage is full
     String message = fullLoop();
 
-    // Case 1 - Wifi output connetion
-    if (isWifiConnected == true){
-        // Send the message
-        WFCon.send(message);
-    }
+    switch(var){
+        case 1:
+            // Send the message
+            WFCon.connect();
+            WFCon.send(message);
+            // Write the disconnect function in WIFI
+            // WFCon.disconnect();
+            break;
 
-    // Case 2 - Cellular output connection
-    else if (isCellConnected == true)
-    {
-        CLCon.send(message);
-    }
+        case 2:
+            CLCon.connect();
+            CLCon.send(message);
+            // Write the disconnect function in CL
+            // CLCon.disconnect();
+            break;
 
-    // Case 3 - Satellite output connection
-    else if  (isSatConnected == true)
-    {
-        STCon.send(message);
-    }
+        case 3:
+            STCon.connect();
+            STCon.send(message);
+            STCon.disconnect();
+            break;
 
-    // Case 4 - No output connection
-    else
-    {
-        Serial.println("No connection to Internet");
+        default:
+            Serial.println("No connection to Internet");
+            break;
     }
 }
 //*******************End of Code Block******************************
