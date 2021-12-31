@@ -93,7 +93,8 @@ boolean SatCON::send(String message){
     int err;
     // Send the message
     Serial.println(F("Trying to send the message.  This might take several minutes."));
-    err = modem.sendSBDText("Hello, world!");
+    // This is where the message should be sent
+    err = modem.sendSBDText(message.c_str());
     if (err != ISBD_SUCCESS)
     {
         Serial.print(F("sendSBDText failed: error "));
