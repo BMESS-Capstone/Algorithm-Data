@@ -73,8 +73,7 @@ void loop()
             // Send the message
             WFCon.connect();
             WFCon.send(message);
-            // Write the disconnect function in WIFI
-            // WFCon.disconnect();
+            WFCon.disconnect();
             break;
 
         case 2:

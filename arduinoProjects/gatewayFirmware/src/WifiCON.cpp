@@ -17,7 +17,7 @@ WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP);
 
 // Time variables
-String formattedDate;
+String formattedTime;
 String dayStamp;
 String timeStamp;
 
@@ -36,6 +36,15 @@ boolean WifiCON::connect(){
     Serial.println("WiFi connected.");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
+}
+
+boolean WifiCON::disconnect(){
+    //disconnect the wifi connection
+    while(WiFi.status() == WL_CONNECTED){
+        WiFi.disconnect();
+    }
+    Serial.println("");
+    Serial.println("WiFi disconnected.");
 }
 
 boolean WifiCON::send(String message){ 
@@ -91,13 +100,13 @@ String WifiCON::getTime(){
     }
 
     // The will get the formatted time
-    formattedDate = timeClient.getFormattedTime();
+    formattedTime = timeClient.getFormattedTime();
 
     // For debug this will print to the terminal
-    Serial.println(formattedDate);
+    Serial.println(formattedTime);
 
     // Return the time to be added
-    return formattedDate;
+    return formattedTime;
 }
 
 

@@ -2,7 +2,6 @@
 
 SatCON::SatCON(){ 
 
-
 }
 
 boolean SatCON::connect(){
@@ -119,7 +118,7 @@ boolean SatCON::send(String message){
 
 }
 
-tm SatCON::getTime(){
+String SatCON::getTime(){
 
     struct tm t;
     int err = modem.getSystemTime(t);
@@ -146,6 +145,12 @@ tm SatCON::getTime(){
         Serial.println(buf);
     }
 
-    return t;
+    String timeStr = String(t.tm_hour);
+    timeStr += ":";
+    timeStr += String(t.tm_min);
+    timeStr += ":";
+    timeStr += String(t.tm_sec);
 
+
+    return timeStr;
 }

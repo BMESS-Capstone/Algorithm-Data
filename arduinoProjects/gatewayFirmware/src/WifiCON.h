@@ -14,6 +14,7 @@ class WifiCON {
     WifiCON();
     WifiCON(const char *ssid, const char *password);
     boolean connect();
+    boolean disconnect();
     boolean send(String message);
     String getTime();
 };

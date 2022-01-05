@@ -22,7 +22,7 @@ class SatCON {
     boolean connect();
     boolean disconnect();
     boolean send(String message);
-    tm getTime();
+    String getTime();
 };
 
 #endif
