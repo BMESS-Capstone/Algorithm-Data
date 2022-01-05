@@ -2,6 +2,7 @@
 #define CellCON_h
 
 #include <Arduino.h>
+#include "Sim800l.h"
 
 class CellCON {
     private:
@@ -12,7 +13,7 @@ class CellCON {
     CellCON();
     boolean connect();
     boolean send(String message);
-    tm getTime();
+    String getTime();
 };
 
 #endif
