@@ -4,6 +4,10 @@
 #include <Arduino.h>
 #include "Sim800l.h"
 
+#define SIM800_RST_PIN 6
+
+SIM800L* sim800l;
+
 class CellCON {
     private:
 
@@ -12,6 +16,8 @@ class CellCON {
 
     CellCON();
     boolean connect();
+    boolean disconnect();
+    void setupModule();
     boolean send(String message);
     String getTime();
 };
