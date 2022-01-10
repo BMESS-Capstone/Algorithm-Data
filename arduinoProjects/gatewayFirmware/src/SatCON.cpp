@@ -119,6 +119,7 @@ boolean SatCON::send(String message){
 }
 
 String SatCON::getTime(){
+    // Should be in format HH:MM:SS
 
     struct tm t;
     int err = modem.getSystemTime(t);

@@ -88,6 +88,7 @@ boolean WifiCON::send(String message){
 }
 
 String WifiCON::getTime(){ 
+    // Should be in format HH:MM:SS
 
     // Start the time client
     timeClient.begin();

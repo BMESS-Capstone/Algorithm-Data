@@ -3,6 +3,9 @@
 
 #include <Arduino.h>
 #include "Sim800l.h"
+#include <SoftwareSerial.h>
+ 
+SoftwareSerial mySerial(2, 3);
 
 #define SIM800_RST_PIN 6
 

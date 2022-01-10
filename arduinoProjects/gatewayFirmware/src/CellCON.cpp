@@ -120,5 +120,30 @@ boolean CellCON::send(String message){
 }
 
 String CellCON::getTime(){
+    // Should be in format HH:MM:SS
 
+    mySerial.begin(19200);               // the GPRS baud rate   
+    Serial.begin(19200);                 // the GPRS baud rate
+
+    String mystr="";
+    int i = 0;
+    mySerial.println("AT+CCLK?");
+    delay (500);
+
+    while (mySerial.available()>0) {
+        mystr += char(mySerial.read());
+    }
+
+    Serial.println("My String |"+mystr+"|");
+    String clockString = "";
+    int x = mystr.indexOf(String('"'))+1;   // Find the first occurance of an open quotation.  This is where we begin to read from
+    int y = mystr.lastIndexOf(String('"')); // Find the last occurance of an open quotation. This is where we end.
+    
+    // Change tdStamp to time output string
+    String tdStamp = mystr.substring(x,y);   // This is the time string yy/mm/dd,hh:mm:ss-tz (tz in qtrs)
+
+    // Hour starts on 9 and second ends on 16
+    String toReturn = mystr.substring(9,16);
+
+    return toReturn;
 }
