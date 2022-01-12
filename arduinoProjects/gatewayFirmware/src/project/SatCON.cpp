@@ -59,8 +59,9 @@ boolean SatCON::connect(){
         Serial.println(err);
         if (err == ISBD_NO_MODEM_DETECTED)
         Serial.println(F("No modem detected: check wiring."));
-        return;
     }
+
+    return modem.isConnected();
 }
 
 
@@ -131,7 +132,6 @@ String SatCON::getTime(){
         else{
             Serial.print(F("Unexpected error "));
             Serial.println(err);
-            return;
         }
 
         // Delay 10 seconds

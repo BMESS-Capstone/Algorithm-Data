@@ -40,7 +40,7 @@ boolean CellCON::connect(){
     return connected;
 }
 
-void setupModule() {
+void CellCON::setupModule() {
     // Wait until the module is ready to accept AT commands
     while(!sim800l->isReady()) {
         Serial.println(F("Problem to initialize AT command, retry in 1 sec"));
@@ -77,7 +77,7 @@ void setupModule() {
     Serial.println(F("GPRS config OK"));
 }
 
-boolean disconnect(){
+boolean CellCON::disconnect(){
     // Close GPRS connectivity (5 trials)
     bool disconnected = sim800l->disconnectGPRS();
     for(uint8_t i = 0; i < 5 && !disconnected; i++) {
@@ -102,9 +102,10 @@ boolean disconnect(){
 }
 
 boolean CellCON::send(String message){
-    message.toCharArray(PAYLOAD,message.length());
+    char payLoad[message.length()];
+    message.toCharArray(payLoad,message.length());
     // Do HTTP POST communication with 10s for the timeout (read and write)
-    uint16_t rc = sim800l->doPost(URL, CONTENT_TYPE, PAYLOAD, 10000, 10000);
+    uint16_t rc = sim800l->doPost(URL, CONTENT_TYPE, payLoad, 10000, 10000);
     if(rc == 200) {
         // Success, output the data received on the serial
         Serial.print(F("HTTP POST successful ("));
@@ -122,16 +123,16 @@ boolean CellCON::send(String message){
 String CellCON::getTime(){
     // Should be in format HH:MM:SS
 
-    mySerial.begin(19200);               // the GPRS baud rate   
+    softSerial.begin(19200);               // the GPRS baud rate   
     Serial.begin(19200);                 // the GPRS baud rate
 
     String mystr="";
     int i = 0;
-    mySerial.println("AT+CCLK?");
+    softSerial.println("AT+CCLK?");
     delay (500);
 
-    while (mySerial.available()>0) {
-        mystr += char(mySerial.read());
+    while (softSerial.available()>0) {
+        mystr += char(softSerial.read());
     }
 
     Serial.println("My String |"+mystr+"|");

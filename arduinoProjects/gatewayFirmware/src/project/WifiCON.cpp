@@ -1,16 +1,9 @@
 #include "WifiCON.h"
-#include "algo.h"
 
 // Wifi Settings
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <NTPClient.h>
-
-const char *ssid = "NetworkName";
-const char *password = "Password";
-
-// Server Settings
-String serverName = "the Server Address... Replace this";
 
 // Time Settings
 WiFiUDP ntpUDP;
@@ -20,6 +13,16 @@ NTPClient timeClient(ntpUDP);
 String formattedTime;
 String dayStamp;
 String timeStamp;
+
+WifiCON::WifiCON(){
+
+}
+
+WifiCON::WifiCON(const char *ssid, const char *password, String serverName){
+    this->ssid = ssid;
+    this->password = password;
+    this->serverName = serverName;
+}
 
 boolean WifiCON::connect(){
     // Initialize Serial Monitor

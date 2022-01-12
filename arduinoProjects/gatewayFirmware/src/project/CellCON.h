@@ -2,19 +2,16 @@
 #define CellCON_h
 
 #include <Arduino.h>
-#include "Sim800l.h"
+#include <SIM800L.h>
 #include <SoftwareSerial.h>
- 
-SoftwareSerial mySerial(2, 3);
+
+SoftwareSerial softSerial(2, 3);
 
 #define SIM800_RST_PIN 6
 
 const char APN[] = "Internet.be";
 const char URL[] = "https://postman-echo.com/post";
 const char CONTENT_TYPE[] = "application/json";
-// *** This is what we need to change ***
-// **************************************
-char PAYLOAD[];
 
 SIM800L* sim800l;
 

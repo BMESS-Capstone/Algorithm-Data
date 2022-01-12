@@ -11,6 +11,7 @@
 
 // Algorithm
 #include "algo.h"
+algo ALGO = algo();
 
 // Communication case variable
 // 1 is wifi connection
@@ -58,7 +59,7 @@ void setup()
     SerialBT.begin("ESP32test");
 
     // Objects of each connection typede
-    WFCon = WifiCON(ssid,password);
+    WFCon = WifiCON(ssid, password, serverName);
     STCon = SatCON();
     CLCon = CellCON();
 }
@@ -66,7 +67,7 @@ void setup()
 void loop()
 {
     // Do a loop until storage is full
-    String message = fullLoop();
+    String message = ALGO.fullLoop();
 
     switch(var){
         case 1:
@@ -79,8 +80,7 @@ void loop()
         case 2:
             CLCon.connect();
             CLCon.send(message);
-            // Write the disconnect function in CL
-            // CLCon.disconnect();
+            CLCon.disconnect();
             break;
 
         case 3:

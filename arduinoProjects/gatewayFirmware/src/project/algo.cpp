@@ -14,14 +14,11 @@
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
 
-BluetoothSerial SerialBT;
+algo::algo(){ 
 
-// Change to false ***
-bool initial = true;
+}
 
-int StO2entry = 0;
-
-void inputFilter()
+void algo::inputFilter()
 {
     for (int i = 0; i < 6; i++)
     {
@@ -32,7 +29,7 @@ void inputFilter()
     }
 }
 
-void calculateODdelta()
+void algo::calculateODdelta()
 {
     // last Optical Density
     for (int i = 0; i < 6; i++)
@@ -61,7 +58,7 @@ void calculateODdelta()
     }
 }
 
-BLA::Matrix<1, 2> calcConc()
+BLA::Matrix<1, 2> algo::calcConc()
 {
     // get the constant
     double frontCoeff = 1 / (pathLengthDelta);
@@ -86,7 +83,7 @@ BLA::Matrix<1, 2> calcConc()
     concHbO2 = result(1, 0);
 }
 
-void updateOutput()
+void algo::updateOutput()
 {
     // adding new output entry
     if (queueCount < 20)
@@ -102,12 +99,12 @@ void updateOutput()
     queueCount++;
 }
 
-void sendUpdate()
+void algo::sendUpdate()
 {
     // This is where we will write the 20 entries to the outgoing HTTP Post
 }
 
-void readIntoIntArray()
+void algo::readIntoIntArray()
 {
     int entryNum = 0;
     char *s = (char *)Serial.read();
@@ -122,7 +119,7 @@ void readIntoIntArray()
     }
 }
 
-void receiveUpdate()
+void algo::receiveUpdate()
 {
     // Checks for incoming info in the bluetooth pipe to be received
     if (SerialBT.available())
@@ -135,7 +132,7 @@ void receiveUpdate()
     }
 }
 
-void currentToLast()
+void algo::currentToLast()
 {
     for (int i = 0; i < 6; i++)
     {
@@ -143,7 +140,7 @@ void currentToLast()
     }
 }
 
-String fullLoop()
+String algo::fullLoop()
 {
     String output = "";
     while (StO2entry < 20)
@@ -200,7 +197,7 @@ String fullLoop()
 }
 
 // Helper for the date and time
-String getDateAndTime()
+String algo::getDateAndTime()
 {
     time_t curr_time;
     tm *curr_tm;
