@@ -23,7 +23,7 @@ void algo::inputFilter()
     for (int i = 0; i < 6; i++)
     {
         if (currentIntensityArray[i] < 200)
-            currentIntensityArray[i] = 0;
+            currentIntensityArray[i] = 1;
         if (currentIntensityArray[i] > 1000)
             currentIntensityArray[i] = 1000;
     }
@@ -44,7 +44,7 @@ void algo::calculateODdelta()
     // current Optical Density
     for (int i = 0; i < 6; i++)
     {
-        if (oDCurrent[i] != 0)
+        if (currentIntensityArray[i] != 0)
         {
             oDCurrent[i] = log10(incidentIntensity / currentIntensityArray[i]);
         }
@@ -150,24 +150,28 @@ String algo::fullLoop()
         // 1. Read first two inputs and chuck them off a cliff
         if (initial == true)
         {
-            int discardCount = 0;
-            while (discardCount < 2)
-            {
-                if (SerialBT.available())
-                {
-                    Serial.write(SerialBT.read());
-                }
-                int s = SerialBT.read();
-                discardCount++;
-            }
+            receiveUpdate();
             initial = false;
+            inputFilter();
+            continue;
+            // int discardCount = 0;
+            // while (discardCount < 2)
+            // {
+            //     if (SerialBT.available())
+            //     {
+            //         Serial.write(SerialBT.read());
+            //     }
+            //     int s = SerialBT.read();
+            //     discardCount++;
+            // }
+            // initial = false;
         }
 
         // 2. First Reading needs to go to the current intensity,
         // and shift readings to the last
 
-        receiveUpdate();
         currentToLast();
+        receiveUpdate(); // should pull one set of measurements
 
         // 3. Now you can start the normal loop
         // Preprocess

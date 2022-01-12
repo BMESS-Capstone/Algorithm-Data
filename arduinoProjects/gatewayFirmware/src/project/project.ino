@@ -62,6 +62,8 @@ void setup()
     WFCon = WifiCON(ssid, password, serverName);
     STCon = SatCON();
     CLCon = CellCON();
+
+    // Add the RTC update here
 }
 
 void loop()
@@ -91,6 +93,21 @@ void loop()
 
         default:
             Serial.println("No connection to Internet");
+            // If we want more lights and sirens, put them here
+
+            // We could add an if statement here
+            if(WFCon.connect()==true){
+                var = 1;
+                break;
+            }
+            if(CLCon.connect()==true){
+                var = 2;
+                break;
+            }
+            if(STCon.connect()==true){
+                var = 3;
+                break;
+            }
             break;
     }
 }
