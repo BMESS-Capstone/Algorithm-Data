@@ -18,7 +18,7 @@ algo ALGO = algo();
 // 2 is cell connection
 // 3 is satellite connection
 // Default is no connection
-int var = 0;
+int var = 1;
 
 // Wifi Settings
 #include "WifiCON.h"
@@ -66,16 +66,20 @@ void setup()
 
     while(RTCset==false)
     // Add the RTC update here
+    // hh:mm:ss
     if(WFCon.connect()==true){
         //set RTC using wifi
+
         RTCset = true;
     }
     else if(CLCon.connect()==true){
         //set RTC using cell
+
         RTCset = true;
     }
     else if(STCon.connect()==true){
         //set RTC using sat
+
         RTCset = true;
     }
     else
