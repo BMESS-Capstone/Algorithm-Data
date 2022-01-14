@@ -47,6 +47,7 @@ BluetoothSerial SerialBT;
 
 // Change to false ***
 bool initial = true;
+bool RTCset = false;
 
 int StO2entry = 0;
 
@@ -63,7 +64,22 @@ void setup()
     STCon = SatCON();
     CLCon = CellCON();
 
+    while(RTCset==false)
     // Add the RTC update here
+    if(WFCon.connect()==true){
+        //set RTC using wifi
+        RTCset = true;
+    }
+    else if(CLCon.connect()==true){
+        //set RTC using cell
+        RTCset = true;
+    }
+    else if(STCon.connect()==true){
+        //set RTC using sat
+        RTCset = true;
+    }
+    else
+    continue;
 }
 
 void loop()

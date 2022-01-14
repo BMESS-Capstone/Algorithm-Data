@@ -58,18 +58,13 @@ boolean WifiCON::send(String message){
 
         // You'll have to change to url/address you want
         http.begin(serverName);
-        http.addHeader("Content-Type", "text/plain");
+        http.addHeader("Content-Type", "application/json");
 
-        // You might have to change this
-        String toSend = message;
-
-        int httpResponseCode = http.POST(toSend);
+        int httpResponseCode = http.POST(message);
 
         // If the response code is a success
         if (httpResponseCode > 0)
         {
-            
-            // Actually need to make a json here
             String response = http.getString();
 
             Serial.println("httpResponseCode");
