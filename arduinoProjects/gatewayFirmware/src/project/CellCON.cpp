@@ -4,6 +4,12 @@ CellCON::CellCON(){
 
 }
 
+CellCON::CellCON(const char* APN, const char* URL, const char* CT){
+    strcpy(this->APN,APN);
+    strcpy(this->URL,URL);
+    strcpy(this->CONTENT_TYPE, CT);
+}
+
 boolean CellCON::connect(){
 
     // Initialize Serial Monitor for debugging

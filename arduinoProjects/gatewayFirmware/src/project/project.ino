@@ -30,6 +30,9 @@ WifiCON WFCon;
 
 // Cell Settings
 #include "CellCON.h"
+const char APN[] = "Some APN Settings";
+const char URL[] = "http://www.google.com";
+const char CONTENT_TYPE[] = "application/json";
 CellCON CLCon;
 
 // Sat Settings
@@ -61,8 +64,9 @@ void setup()
 
     // Objects of each connection typede
     WFCon = WifiCON(ssid, password, serverName);
+    CLCon = CellCON(APN, URL, CONTENT_TYPE);
     STCon = SatCON();
-    CLCon = CellCON();
+
 
     while(RTCset==false)
     // Add the RTC update here

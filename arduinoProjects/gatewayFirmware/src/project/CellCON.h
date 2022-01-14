@@ -9,20 +9,19 @@ SoftwareSerial softSerial(2, 3);
 
 #define SIM800_RST_PIN 6
 
-const char APN[] = "Internet.be";
-const char URL[] = "https://postman-echo.com/post";
-const char CONTENT_TYPE[] = "application/json";
-
 SIM800L* sim800l;
 
 class CellCON {
-    private:
-
+    protected:
+    char APN[];
+    char URL[];
+    char CONTENT_TYPE[];
 
     public:
 
     CellCON();
     boolean connect();
+    CellCON(const char* APN, const char* URL, const char* CT);
     boolean disconnect();
     void setupModule();
     boolean send(String message);
