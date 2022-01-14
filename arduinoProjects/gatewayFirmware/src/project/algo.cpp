@@ -142,7 +142,9 @@ void algo::currentToLast()
 
 String algo::fullLoop()
 {
-    String output = "";
+    String output = "{";
+    String values = " \"Values\" : [";
+    String times = " \"Times\" : [";
     while (StO2entry < 20)
     {
         // Now to write a script to deal with incoming
@@ -154,17 +156,6 @@ String algo::fullLoop()
             initial = false;
             inputFilter();
             continue;
-            // int discardCount = 0;
-            // while (discardCount < 2)
-            // {
-            //     if (SerialBT.available())
-            //     {
-            //         Serial.write(SerialBT.read());
-            //     }
-            //     int s = SerialBT.read();
-            //     discardCount++;
-            // }
-            // initial = false;
         }
 
         // 2. First Reading needs to go to the current intensity,
@@ -187,15 +178,19 @@ String algo::fullLoop()
         updateOutput();
 
         // 7. Concatenates the results into a single string
-        output += ("%f, ", outputStO2[StO2entry]);
+        values += ("\"%f\", ", outputStO2[StO2entry]);
 
-        // 8. Add timestamps to the output
-        output += (getDateAndTime() + ", ");
+        // 8. Add timestamps to the output (hh:mm:ss)
+        times += (getDateAndTime() + ", ");
 
         StO2entry++;
     }
-    // Restarts count for next round
+    // Makes the JSON string
     StO2entry = 0;
+    output += values;
+    output += "], ";
+    output += times;
+    output += "]}";
     // Returns the String which is 20 readings
     return output;
 }
@@ -214,3 +209,8 @@ String algo::getDateAndTime()
     String toReturn = time;
     return toReturn;
 }
+
+/* { Values : [
+    
+
+]} */
