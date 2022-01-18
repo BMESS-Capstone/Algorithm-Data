@@ -13,16 +13,14 @@
 IridiumSBD modem(IridiumWire);
 
 class SatCON {
-    private:
-
-
-    public:
+  public:
 
     SatCON();
     boolean connect();
     boolean disconnect();
     boolean send(String message);
     String getTime();
+//  private:
 };
 
 #endif

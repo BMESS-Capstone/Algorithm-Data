@@ -7,7 +7,7 @@
 #include <ctime>
 
 class algo {
-public:
+  public:
     algo();
 
     BluetoothSerial SerialBT;

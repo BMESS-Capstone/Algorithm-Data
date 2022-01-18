@@ -1,7 +1,7 @@
 #ifndef CellCON_h
 #define CellCON_h
 
-#include <Arduino.h>
+//#include <Arduino.h> // NOTE: I don't think this is necessary
 #include <SIM800L.h>
 #include <SoftwareSerial.h>
 
@@ -12,13 +12,7 @@ SoftwareSerial softSerial(2, 3);
 SIM800L* sim800l;
 
 class CellCON {
-    protected:
-    char APN[];
-    char URL[];
-    char CONTENT_TYPE[];
-
-    public:
-
+  public:
     CellCON();
     boolean connect();
     CellCON(const char* APN, const char* URL, const char* CT);
@@ -26,6 +20,11 @@ class CellCON {
     void setupModule();
     boolean send(String message);
     String getTime();
+
+  protected:
+    char APN[];
+    char URL[];
+    char CONTENT_TYPE[];
 };
 
 #endif
