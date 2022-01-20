@@ -10,8 +10,6 @@ class algo {
   public:
     algo();
 
-    BluetoothSerial SerialBT;
-
     // Change to false ***
     bool initial = true;
     int StO2entry = 0;

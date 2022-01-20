@@ -1,7 +1,9 @@
 #include "SatCON.h"
 
-SatCON::SatCON() {
+SatCON::SatCON() {}
 
+void SatCON::operator=(const SatCON &) {
+  SatCON();
 }
 
 boolean SatCON::connect() {

@@ -14,11 +14,9 @@ String formattedTime;
 String dayStamp;
 String timeStamp;
 
-WifiCON::WifiCON() {
+WifiCON::WifiCON() {}
 
-}
-
-WifiCON::WifiCON(const char *ssid, const char *password, String serverName) {
+WifiCON::WifiCON(const char *ssid, const char *password, const char *serverName) {
   this->ssid = ssid;
   this->password = password;
   this->serverName = serverName;

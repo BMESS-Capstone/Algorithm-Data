@@ -1,3 +1,6 @@
+#ifndef PARAMETERS_H
+#define PARAMETERS_H
+
 // Parameters only for Sensor
 #define BATTERY_INTERVAL_MS 2000
 #define BATTERY_PIN A0
@@ -16,3 +19,5 @@
 
 #define SENSOR_CHAR_UUID "fec40b26-757a-11ec-90d6-0242ac120003"
 #define BATTERY_CHAR_UUID "fec40dc4-757a-11ec-90d6-0242ac120003"
+
+#endif

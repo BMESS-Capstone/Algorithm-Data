@@ -1,22 +1,10 @@
 // Main Arduino
 #include <Arduino.h>
 
-// Bluetooth
-#include "BluetoothSerial.h"
-#include <BLEDevice.h>
-#include <BLEUtils.h>
-#include <BLEServer.h>
-
 // Algorithm
 #include "algo.h"
 
-#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
-#error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
-#endif
-
-algo::algo() {
-
-}
+algo::algo() {}
 
 void algo::inputFilter()
 {
@@ -123,14 +111,8 @@ void algo::readIntoIntArray()
 void algo::receiveUpdate()
 {
   // Checks for incoming info in the bluetooth pipe to be received
-  if (SerialBT.available())
-  {
-    while (SerialBT.available())
-    {
-      Serial.write(SerialBT.read());
-    }
-    readIntoIntArray();
-  }
+  // TODO
+  readIntoIntArray();
 }
 
 void algo::currentToLast()

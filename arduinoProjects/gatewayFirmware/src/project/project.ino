@@ -4,10 +4,7 @@
 #include <Arduino.h>
 
 // Bluetooth
-#include "BluetoothSerial.h"
-#include <BLEDevice.h>
-#include <BLEUtils.h>
-#include <BLEServer.h>
+#include <NimBLEDevice.h>
 
 // Algorithm
 #include "algo.h"
@@ -30,9 +27,9 @@ WifiCON WFCon;
 
 // Cell Settings
 #include "CellCON.h"
-const char APN[] = "Some APN Settings";
-const char URL[] = "http://www.google.com";
-const char CONTENT_TYPE[] = "application/json";
+const char *APN = "Some APN Settings";
+const char *URL = "http://www.google.com";
+const char *CONTENT_TYPE = "application/json";
 CellCON CLCon;
 
 // Sat Settings
@@ -40,13 +37,7 @@ CellCON CLCon;
 SatCON STCon;
 
 // Server Settings
-String serverName = "the Server Address... Replace this";
-
-#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
-#error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
-#endif
-
-BluetoothSerial SerialBT;
+const char *serverName = "the Server Address... Replace this";
 
 // Change to false ***
 bool initial = true;
@@ -58,15 +49,12 @@ int StO2entry = 0;
 
 void setup()
 {
-  delay(1000);
   Serial.begin(115200);
-  SerialBT.begin("ESP32test");
 
   // Objects of each connection typede
-  WFCon = WifiCON(ssid, password, serverName);
   CLCon = CellCON(APN, URL, CONTENT_TYPE);
+  WFCon = WifiCON(ssid, password, serverName);
   STCon = SatCON();
-
 
   while (RTCset == false)
     // Add the RTC update here

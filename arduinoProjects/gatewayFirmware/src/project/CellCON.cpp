@@ -1,13 +1,15 @@
 #include "CellCON.h"
 
-CellCON::CellCON() {
-
-}
+CellCON::CellCON() {}
 
 CellCON::CellCON(const char* APN, const char* URL, const char* CT) {
-  strcpy(this->APN, APN);
-  strcpy(this->URL, URL);
-  strcpy(this->CONTENT_TYPE, CT);
+  this->APN = APN;
+  this->URL = URL;
+  this->CONTENT_TYPE = CT;
+}
+
+void CellCON::operator=(const CellCON &) {
+  CellCON();
 }
 
 boolean CellCON::connect() {
@@ -129,7 +131,7 @@ boolean CellCON::send(String message) {
 String CellCON::getTime() {
   // Should be in format HH:MM:SS
 
-  softSerial.begin(19200);               // the GPRS baud rate
+  softSerial.begin(19200, SWSERIAL_8N1, RX_PIN, TX_PIN);  // the GPRS baud rate
   Serial.begin(19200);                 // the GPRS baud rate
 
   String mystr = "";
