@@ -204,3 +204,5 @@ String algo::getDateAndTime()
 }
 
 const char algo::serviceUUID[] = CONNECT_UUID;
+const char algo::sensorCharacteristicUUID[] = SENSOR_CHAR_UUID;
+const char algo::batteryCharacteristicUUID[] = BATTERY_CHAR_UUID;

@@ -94,8 +94,8 @@ class algo {
     //BLE Client
     static BLEClient *pClient;
     // Connection Characteristic
-    static char sensorCharacteristicUUID[];
-    static char batteryCharacteristicUUID[];
+    static const char sensorCharacteristicUUID[];
+    static const char batteryCharacteristicUUID[];
 };
 
 #endif
