@@ -3,9 +3,6 @@
 // Main Arduino
 #include <Arduino.h>
 
-// Bluetooth
-#include <NimBLEDevice.h>
-
 // Algorithm
 #include "algo.h"
 algo ALGO = algo();
@@ -61,7 +58,7 @@ void setup()
     // hh:mm:ss
     if (WFCon.connect() == true) {
       //set RTC using wifi
-
+      
       RTCset = true;
     }
     else if (CLCon.connect() == true) {

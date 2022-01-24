@@ -4,7 +4,17 @@
 // Algorithm
 #include "algo.h"
 
-algo::algo() {}
+// Parameters
+#include "parameters.h"
+
+//Bluetooth
+#include <NimBLEDevice.h>
+
+algo::algo()
+{
+//  // BLE Services
+//  serviceUUID = CONNECT_UUID;
+}
 
 void algo::inputFilter()
 {
@@ -192,3 +202,5 @@ String algo::getDateAndTime()
   String toReturn = time;
   return toReturn;
 }
+
+const char algo::serviceUUID[] = CONNECT_UUID;

@@ -87,6 +87,15 @@ class algo {
 
     // Helper for the date and time
     String getDateAndTime();
+
+  private:
+    //BLE Service
+    static const char serviceUUID[];
+    //BLE Client
+    static BLEClient *pClient;
+    // Connection Characteristic
+    static char sensorCharacteristicUUID[];
+    static char batteryCharacteristicUUID[];
 };
 
 #endif
