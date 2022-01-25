@@ -1,7 +1,6 @@
-#include <iostream>
-
-// Main Arduino
-#include <Arduino.h>
+//Bluetooth
+#include "parameters.h"
+#include <NimBLEDevice.h>
 
 // Algorithm
 #include "algo.h"

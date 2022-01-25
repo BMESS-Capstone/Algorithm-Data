@@ -13,10 +13,9 @@ void CellCON::operator=(const CellCON &) {
 }
 
 boolean CellCON::connect() {
-
-  // Initialize Serial Monitor for debugging
-  Serial.begin(115200);
-  while (!Serial);
+  //// Initialize Serial Monitor for debugging
+  //Serial.begin(115200);
+  //while (!Serial);
 
   // Initialize the hardware Serial1
   Serial1.begin(9600);

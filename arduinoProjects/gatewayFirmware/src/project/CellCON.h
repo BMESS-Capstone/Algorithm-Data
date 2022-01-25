@@ -1,7 +1,6 @@
 #ifndef CellCON_h
 #define CellCON_h
 
-//#include <Arduino.h> // NOTE: I don't think this is necessary
 #include <SIM800L.h>
 #include <SoftwareSerial.h>
 
