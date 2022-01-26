@@ -4,15 +4,21 @@
 // Algorithm
 #include "algo.h"
 
-#include "parameters.h"
-
 extern float sensorValue;
 
-algo::algo(){}
+algo::algo(){
+  for(int i = 0; i < SENSOR_DATA_LENGTH; i++) {
+    currentIntensityArray[i] = 0;
+    lastIntensityArray[i] = 0;
+    oDCurrent = 0;
+    oDLast = 0;
+    oDChange = 0;
+  }
+}
 
 void algo::inputFilter()
 {
-  for (int i = 0; i < 6; i++)
+  for (int i = 0; i < SENSOR_DATA_LENGTH; i++)
   {
     if (currentIntensityArray[i] < 200)
       currentIntensityArray[i] = 1;
@@ -24,7 +30,7 @@ void algo::inputFilter()
 void algo::calculateODdelta()
 {
   // last Optical Density
-  for (int i = 0; i < 6; i++)
+  for (int i = 0; i < SENSOR_DATA_LENGTH; i++)
   {
     if (lastIntensityArray[i] != 0)
     {
@@ -34,7 +40,7 @@ void algo::calculateODdelta()
       oDLast[i] = 0;
   }
   // current Optical Density
-  for (int i = 0; i < 6; i++)
+  for (int i = 0; i < SENSOR_DATA_LENGTH; i++)
   {
     if (currentIntensityArray[i] != 0)
     {
@@ -44,7 +50,7 @@ void algo::calculateODdelta()
       oDCurrent[i] = 0;
   }
   // the change in optical density
-  for (int i = 0; i < 6; i++)
+  for (int i = 0; i < SENSOR_DATA_LENGTH; i++)
   {
     oDChange[i] = oDCurrent[i] - oDLast[i];
   }
@@ -110,7 +116,7 @@ void algo::receiveUpdate()
 
 void algo::currentToLast()
 {
-  for (int i = 0; i < 6; i++)
+  for (int i = 0; i < SENSOR_DATA_LENGTH; i++)
   {
     currentIntensityArray[i] = lastIntensityArray[i];
   }

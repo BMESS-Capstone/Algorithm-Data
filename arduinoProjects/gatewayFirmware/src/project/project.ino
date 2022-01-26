@@ -1,5 +1,5 @@
 //Bluetooth
-#include "parameters.h"
+#include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
 #include <NimBLEDevice.h>
 //The following values need to be declared before #include "algo.h"
 float sensorValue;
@@ -170,8 +170,8 @@ boolean connectToServer(std::string device) {
   }
 
   if (!isConnectionComplete) {
-    if (myDevices[int(sensorValue)] == "")
-      myDevices[int(sensorValue)] = myDevice->getAddress().toString();
+    if (myDevices[batteryValue] == "")
+      myDevices[batteryValue] = myDevice->getAddress().toString();
     else {
       Serial.println("2 sensors have the same location value");
       while (1) {

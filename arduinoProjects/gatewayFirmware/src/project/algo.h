@@ -19,11 +19,11 @@ class algo {
 
     // These are the storage for the intensities and the intermediates
     // Initialize the arrays
-    float currentIntensityArray[6] = {0, 0, 0, 0, 0, 0};
-    float lastIntensityArray[6] = {0, 0, 0, 0, 0, 0};
-    float oDCurrent[6] = {0, 0, 0, 0, 0, 0};
-    float oDLast[6] = {0, 0, 0, 0, 0, 0};
-    float oDChange[6] = {0, 0, 0, 0, 0, 0};
+    float currentIntensityArray[SENSOR_DATA_LENGTH];
+    float lastIntensityArray[SENSOR_DATA_LENGTH];
+    float oDCurrent[SENSOR_DATA_LENGTH];
+    float oDLast[SENSOR_DATA_LENGTH];
+    float oDChange[SENSOR_DATA_LENGTH];
 
     // Output array for the changes in concentration and intensity
     float outputStO2[20];
