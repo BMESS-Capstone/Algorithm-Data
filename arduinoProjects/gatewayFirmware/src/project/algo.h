@@ -6,6 +6,8 @@
 #include <BasicLinearAlgebra.h>
 #include <ctime>
 
+#include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
+
 class algo {
   public:
     algo();

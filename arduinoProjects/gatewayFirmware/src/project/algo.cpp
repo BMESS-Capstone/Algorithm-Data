@@ -12,9 +12,9 @@ algo::algo(){
   for(int i = 0; i < SENSOR_DATA_LENGTH; i++) {
     currentIntensityArray[i] = 0;
     lastIntensityArray[i] = 0;
-    oDCurrent = 0;
-    oDLast = 0;
-    oDChange = 0;
+    oDCurrent[i] = 0;
+    oDLast[i] = 0;
+    oDChange[i] = 0;
   }
 }
 

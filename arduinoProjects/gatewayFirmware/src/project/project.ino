@@ -80,7 +80,7 @@ static void notifyCallback(BLERemoteCharacteristic *pBLERemoteCharacteristic, ui
   if (isConnectionComplete) {
     if (pBLERemoteCharacteristic->getUUID().toString() == sensorCharacteristicUUID) {
       for(int i = 0; i < SENSOR_DATA_LENGTH; i++) {
-        sensorValue[i] = *(float *)(pData + i*sizeof(float))
+        sensorValue[i] = *(float *)(pData + i*sizeof(float));
       }
       
       //Testing (TODO: Delete)
