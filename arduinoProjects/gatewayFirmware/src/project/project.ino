@@ -2,7 +2,7 @@
 #include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
 #include <NimBLEDevice.h>
 //The following values need to be declared before #include "algo.h"
-float sensorValue;
+float sensorValue[SENSOR_DATA_LENGTH];
 int batteryValue;
 
 // Algorithm
@@ -78,7 +78,17 @@ BLERemoteCharacteristic *pRemoteBatteryCharacteristic;
 static void notifyCallback(BLERemoteCharacteristic *pBLERemoteCharacteristic, uint8_t *pData, size_t length, bool isNotify) {
   if (isConnectionComplete) {
     if (pBLERemoteCharacteristic->getUUID().toString() == sensorCharacteristicUUID) {
-      sensorValue = *(float *)pData;
+      for(int i = 0; i < SENSOR_DATA_LENGTH; i++) {
+        sensorValue[i] = *(float *)(pData + i*sizeof(float))
+      }
+      
+      //Testing (TODO: Delete)
+      for(int i = 0; i < SENSOR_DATA_LENGTH; i++) {
+        Serial.print(sensorValue[i]);
+        Serial.print(" ");
+      }
+      Serial.println();
+      
       if (moreThanOneSensor)
         iterationCounter++;
     } else
@@ -151,8 +161,7 @@ boolean connectToServer(std::string device) {
   }
 
   if (pRemoteSensorCharacteristic->canRead() && pRemoteBatteryCharacteristic->canRead()) {
-    // Read the values of the characteristics.
-    sensorValue = pRemoteSensorCharacteristic->readValue<float>();
+    // Read the values of the location
     batteryValue = pRemoteBatteryCharacteristic->readValue<uint16_t>();
   } else {
     pClient->disconnect();
