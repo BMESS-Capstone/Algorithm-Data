@@ -1,10 +1,11 @@
 //Bluetooth
 #include "C:\Users\khaled.elmalawany1\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
 #include <NimBLEDevice.h>
-//The following values need to be declared before #include "algo.h"
+//The following variables need to be declared before #include "algo.h"
 float sensorValue[SENSOR_DATA_LENGTH];
 int batteryValue;
 boolean isUpdated;
+boolean switchSensor;
 
 // Algorithm
 #include "algo.h"
@@ -63,7 +64,6 @@ boolean connected = false;
 boolean isConnectionComplete = false;
 boolean moreThanOneSensor = false;
 uint8_t connectionCounter = 0;
-uint8_t iterationCounter = 0;
 uint8_t deviceIndex = 0;
 uint8_t brockenDevicesCounter = 0;
 
@@ -79,13 +79,10 @@ BLERemoteCharacteristic *pRemoteBatteryCharacteristic;
 static void notifyCallback(BLERemoteCharacteristic *pBLERemoteCharacteristic, uint8_t *pData, size_t length, bool isNotify) {
   if (isConnectionComplete) {
     if (pBLERemoteCharacteristic->getUUID().toString() == sensorCharacteristicUUID) {
-      for(int i = 0; i < SENSOR_DATA_LENGTH; i++) {
-        sensorValue[i] = *(float *)(pData + i*sizeof(float));
+      for (int i = 0; i < SENSOR_DATA_LENGTH; i++) {
+        sensorValue[i] = *(float *)(pData + i * sizeof(float));
       }
-      
-      if (moreThanOneSensor)
-        iterationCounter++;
-      
+
       isUpdated = true;
     } else
       batteryValue = *(int *)pData;
@@ -201,45 +198,46 @@ void setup()
 {
   Serial.begin(115200);
 
-//  // Objects of each connection typede
-//  CLCon = CellCON(APN, URL, CONTENT_TYPE);
-//  WFCon = WifiCON(ssid, password, serverName);
-//  STCon = SatCON();
-//
-//  while (RTCset == false) {
-//    // Add the RTC update here
-//    // hh:mm:ss
-//    if (WFCon.connect() == true) {
-//      //set RTC using wifi
-//
-//      RTCset = true;
-//    }
-//    else if (CLCon.connect() == true) {
-//      //set RTC using cell
-//
-//      RTCset = true;
-//    }
-//    else if (STCon.connect() == true) {
-//      //set RTC using sat
-//
-//      RTCset = true;
-//    }
-//    else
-//      continue;
-//  }
+  //  // Objects of each connection type
+  //  CLCon = CellCON(APN, URL, CONTENT_TYPE);
+  //  WFCon = WifiCON(ssid, password, serverName);
+  //  STCon = SatCON();
+  //
+  //  while (RTCset == false) {
+  //    // Add the RTC update here
+  //    // hh:mm:ss
+  //    if (WFCon.connect() == true) {
+  //      //set RTC using wifi
+  //
+  //      RTCset = true;
+  //    }
+  //    else if (CLCon.connect() == true) {
+  //      //set RTC using cell
+  //
+  //      RTCset = true;
+  //    }
+  //    else if (STCon.connect() == true) {
+  //      //set RTC using sat
+  //
+  //      RTCset = true;
+  //    }
+  //    else
+  //      continue;
+  //  }
 
   //BLE setup
   pinMode(ONBOARD_LED, OUTPUT);
 
   BLEDevice::init("pIRfusiX Gateway");
 
+  isUpdated = false;
+  switchSensor = false;
+
   // Retrieve a Scanner and set the callback
   BLEScan *pBLEScan = BLEDevice::getScan();
   pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
   pBLEScan->setActiveScan(true);
   pBLEScan->start(0, false);
-
-  isUpdated = false;
 }
 
 void loop()
@@ -286,9 +284,8 @@ void loop()
   }
 
   if (connected && isConnectionComplete) {
-    //TODO: Implement algo with more than one sensor
-    if (moreThanOneSensor && iterationCounter > 20) {
-      iterationCounter = 0;
+    if (moreThanOneSensor && switchSensor) {
+      switchSensor = false;
       pClient->disconnect();
       while (connected)
         delay(1);
@@ -301,10 +298,11 @@ LOOP:
       } while (myDevices[deviceIndex] == "");
       if (!connectToServer(myDevices[deviceIndex]))
         goto LOOP;
-    } else if (!moreThanOneSensor) {
+    } else {
       // Do a loop until storage is full
-      String message = ALGO.fullLoop();
+      String message = ALGO.fullLoop(deviceIndex);
       Serial.println(message);
+      //sendMessage(message);
     }
   } else {
     if (connectionCounter > TOTAL_POSSIBLE_LOCATIONS + 1) {
@@ -316,45 +314,46 @@ LOOP:
     BLEDevice::getScan()->start(1, false); // this is just to start scan after disconnect
   }
   //***************************END OF BLUETOOTH LOOP**********************************
+}
 
-  //  switch (var) {
-  //    case 1:
-  //      // Send the message
-  //      WFCon.connect();
-  //      WFCon.send(message);
-  //      WFCon.disconnect();
-  //      break;
-  //
-  //    case 2:
-  //      CLCon.connect();
-  //      CLCon.send(message);
-  //      CLCon.disconnect();
-  //      break;
-  //
-  //    case 3:
-  //      STCon.connect();
-  //      STCon.send(message);
-  //      STCon.disconnect();
-  //      break;
-  //
-  //    default:
-  //      Serial.println("No connection to Internet");
-  //      // If we want more lights and sirens, put them here
-  //
-  //      // We could add an if statement here
-  //      if (WFCon.connect() == true) {
-  //        var = 1;
-  //        break;
-  //      }
-  //      if (CLCon.connect() == true) {
-  //        var = 2;
-  //        break;
-  //      }
-  //      if (STCon.connect() == true) {
-  //        var = 3;
-  //        break;
-  //      }
-  //      break;
-  //  }
+void sendMessage(String message) {
+  switch (var) {
+    case 1:
+      // Send the message
+      WFCon.connect();
+      WFCon.send(message);
+      WFCon.disconnect();
+      break;
+
+    case 2:
+      CLCon.connect();
+      CLCon.send(message);
+      CLCon.disconnect();
+      break;
+
+    case 3:
+      STCon.connect();
+      STCon.send(message);
+      STCon.disconnect();
+      break;
+
+    default:
+      Serial.println("No connection to Internet");
+      // If we want more lights and sirens, put them here
+
+      // We could add an if statement here
+      if (WFCon.connect() == true) {
+        var = 1;
+        break;
+      }
+      if (CLCon.connect() == true) {
+        var = 2;
+        break;
+      }
+      if (STCon.connect() == true) {
+        var = 3;
+        break;
+      }
+  }
 }
 //*******************End of Code Block******************************

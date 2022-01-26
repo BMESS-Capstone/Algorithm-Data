@@ -26,7 +26,7 @@ class algo {
     float oDChange[SENSOR_DATA_LENGTH];
 
     // Output array for the changes in concentration and intensity
-    float outputStO2[20];
+    float outputStO2[SENSOR_READINGS];
     float previousStO2Value = INITIAL_STO2_VALUE; //TODO: Talk to MacBeth to determine proper value
 
     // Wavelength constants in nanometers
@@ -78,7 +78,7 @@ class algo {
 
     void currentToLast();
 
-    String fullLoop();
+    String fullLoop(int deviceLocation);
 
     // Helper for the date and time
     String getDateAndTime();

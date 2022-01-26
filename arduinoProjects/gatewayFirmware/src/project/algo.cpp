@@ -5,11 +5,12 @@
 #include "algo.h"
 
 extern float sensorValue[SENSOR_DATA_LENGTH];
-extern int batteryValue; // TODO: implement battery data into JSON file (if time permits)
+extern int batteryValue;
 extern boolean isUpdated;
+extern boolean switchSensor;
 
-algo::algo(){
-  for(int i = 0; i < SENSOR_DATA_LENGTH; i++) {
+algo::algo() {
+  for (int i = 0; i < SENSOR_DATA_LENGTH; i++) {
     currentIntensityArray[i] = 0;
     lastIntensityArray[i] = 0;
     oDChange[i] = 0;
@@ -39,19 +40,19 @@ boolean algo::calculateODdelta()
       oDLast = log10(incidentIntensity / lastIntensityArray[i]);
     else
       oDLast = 0;
-      
+
     // current Optical Density
     if (currentIntensityArray[i] != 0)
       oDCurrent = log10(incidentIntensity / currentIntensityArray[i]);
     else
       oDCurrent = 0;
-      
+
     oDChange[i] = oDCurrent - oDLast;
   }
 
-  if(oDChange[uChannel] == 0 && oDChange[wChannel] == 0)
+  if (oDChange[uChannel] == 0 && oDChange[wChannel] == 0)
     return false;
-    
+
   return true;
 }
 
@@ -91,10 +92,10 @@ void algo::updateOutput()
 void algo::receiveUpdate()
 {
   //Make sure sensor value is updated
-  while(!isUpdated)
+  while (!isUpdated)
     delay(1);
   isUpdated = false;
-  
+
   for (int i = 0; i < SENSOR_DATA_LENGTH ; i++)
     currentIntensityArray[i] = sensorValue[i];
 }
@@ -105,12 +106,14 @@ void algo::currentToLast()
     lastIntensityArray[i] = currentIntensityArray[i];
 }
 
-String algo::fullLoop()
+String algo::fullLoop(int deviceLocation)
 {
   String output = "{";
+  String location = " \"DeviceLocation\" : [";
   String values = " \"Values\" : [";
   String times = " \"Times\" : [";
-  while (StO2entry < 20)
+  String battPerc = " \"BatteryPercentage\" : [";
+  while (StO2entry < SENSOR_READINGS)
   {
     // 1. Read first two inputs and chuck them off a cliff
     if (initial == true)
@@ -132,13 +135,13 @@ String algo::fullLoop()
     inputFilter();
 
     // 4. Calculate the oDChange and returns true if there is a change
-    if(calculateODdelta()) {
+    if (calculateODdelta()) {
       // 5a. Calculate the concentrations
       calcConc();
-  
+
       // 6. Update the output values and send if needed
       updateOutput();
-  
+
       // 7. Concatenates the results into a single string
       values += String(outputStO2[StO2entry]) + ", ";
     } else
@@ -151,11 +154,17 @@ String algo::fullLoop()
   }
   // Makes the JSON string
   StO2entry = 0;
+  output += location + String(deviceLocation) + ", ";
+  output += "], ";
   output += values;
   output += "], ";
   output += times;
+  output += "], ";
+  output += battPerc + String(batteryValue) + ", ";
   output += "]}";
-  // Returns the String which is 20 readings
+
+  switchSensor = true;
+  // Returns the String which is SENSOR_READINGS readings
   return output;
 }
 
