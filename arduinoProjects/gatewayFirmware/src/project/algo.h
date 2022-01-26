@@ -6,7 +6,7 @@
 #include <BasicLinearAlgebra.h>
 #include <ctime>
 
-#include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
+#include "C:\Users\khaled.elmalawany1\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
 
 class algo {
   public:
@@ -23,8 +23,6 @@ class algo {
     // Initialize the arrays
     float currentIntensityArray[SENSOR_DATA_LENGTH];
     float lastIntensityArray[SENSOR_DATA_LENGTH];
-    float oDCurrent[SENSOR_DATA_LENGTH];
-    float oDLast[SENSOR_DATA_LENGTH];
     float oDChange[SENSOR_DATA_LENGTH];
 
     // Output array for the changes in concentration and intensity
@@ -54,7 +52,7 @@ class algo {
 
     // Pathlength difference
     // We can assume it is a constant as it should not change reading that much
-    const float pathLengthDelta = 1;
+    const float pathLengthDelta = 1.0;
 
     // Differential pathlength factor
     // These are estimates which were interpolated from the research

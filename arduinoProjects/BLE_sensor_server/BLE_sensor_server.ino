@@ -21,7 +21,7 @@
 */
 
 #include <ArduinoBLE.h>
-#include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
+#include "C:\Users\khaled.elmalawany1\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
 
 int location = LEFT_ARM;
 

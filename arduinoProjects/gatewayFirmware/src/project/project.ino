@@ -1,5 +1,5 @@
 //Bluetooth
-#include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
+#include "C:\Users\khaled.elmalawany1\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
 #include <NimBLEDevice.h>
 //The following values need to be declared before #include "algo.h"
 float sensorValue[SENSOR_DATA_LENGTH];
@@ -82,13 +82,6 @@ static void notifyCallback(BLERemoteCharacteristic *pBLERemoteCharacteristic, ui
       for(int i = 0; i < SENSOR_DATA_LENGTH; i++) {
         sensorValue[i] = *(float *)(pData + i*sizeof(float));
       }
-      
-      //Testing (TODO: Delete)
-      for(int i = 0; i < SENSOR_DATA_LENGTH; i++) {
-        Serial.print(sensorValue[i]);
-        Serial.print(" ");
-      }
-      Serial.println();
       
       if (moreThanOneSensor)
         iterationCounter++;
@@ -245,6 +238,8 @@ void setup()
   pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
   pBLEScan->setActiveScan(true);
   pBLEScan->start(0, false);
+
+  isUpdated = false;
 }
 
 void loop()
@@ -309,7 +304,7 @@ LOOP:
     } else if (!moreThanOneSensor) {
       // Do a loop until storage is full
       String message = ALGO.fullLoop();
-      //Serial.println(message);
+      Serial.println(message);
     }
   } else {
     if (connectionCounter > TOTAL_POSSIBLE_LOCATIONS + 1) {
