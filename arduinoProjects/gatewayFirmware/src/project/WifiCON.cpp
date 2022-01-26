@@ -24,7 +24,7 @@ WifiCON::WifiCON(const char *ssid, const char *password, const char *serverName)
 
 boolean WifiCON::connect() {
   // Initialize Serial Monitor
-  Serial.begin(115200);
+  //Serial.begin(115200);
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.begin(ssid, password);
