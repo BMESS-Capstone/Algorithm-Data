@@ -4,6 +4,7 @@
 //The following values need to be declared before #include "algo.h"
 float sensorValue[SENSOR_DATA_LENGTH];
 int batteryValue;
+boolean isUpdated;
 
 // Algorithm
 #include "algo.h"
@@ -91,6 +92,8 @@ static void notifyCallback(BLERemoteCharacteristic *pBLERemoteCharacteristic, ui
       
       if (moreThanOneSensor)
         iterationCounter++;
+      
+      isUpdated = true;
     } else
       batteryValue = *(int *)pData;
   }

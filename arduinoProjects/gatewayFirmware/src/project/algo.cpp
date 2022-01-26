@@ -4,7 +4,9 @@
 // Algorithm
 #include "algo.h"
 
-extern float sensorValue;
+extern float sensorValue[SENSOR_DATA_LENGTH];
+extern int batteryValue; // TODO: implement battery data into JSON file (if time permits)
+extern boolean isUpdated;
 
 algo::algo(){
   for(int i = 0; i < SENSOR_DATA_LENGTH; i++) {
@@ -105,7 +107,11 @@ void algo::sendUpdate()
 
 void algo::receiveUpdate()
 {
-  Serial.println(sensorValue);
+  //Make sure sensor value is updated
+  while(!isUpdated)
+    delay(1);
+  isUpdated = false;
+  
 //  int entryNum = 0;
 //  for (int i = 0; i < sizeof(sensorValue) / sizeof(float); i++)
 //  {
@@ -129,9 +135,6 @@ String algo::fullLoop()
   String times = " \"Times\" : [";
   while (StO2entry < 20)
   {
-    // TODO: Data to make sure sensor is updated
-    delay(50);
-
 //    // 1. Read first two inputs and chuck them off a cliff
 //    if (initial == true)
 //    {
