@@ -27,6 +27,7 @@ class algo {
 
     // Output array for the changes in concentration and intensity
     float outputStO2[20];
+    float previousStO2Value = INITIAL_STO2_VALUE; //TODO: Talk to MacBeth to determine proper value
 
     // Wavelength constants in nanometers
     int HbWave = 760;
@@ -64,18 +65,13 @@ class algo {
     float concHb;
     float concHbO2;
 
-    // Output counter, keeps track of when to signal the send function
-    int queueCount = 0;
-
     void inputFilter();
 
-    void calculateODdelta();
+    boolean calculateODdelta();
 
     BLA::Matrix<1, 2> calcConc();
 
     void updateOutput();
-
-    void sendUpdate();
 
     void receiveUpdate();
 

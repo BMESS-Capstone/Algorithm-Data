@@ -7,6 +7,7 @@
 
 // Parameters only for Gateway
 #define ONBOARD_LED 2
+#define INITIAL_STO2_VALUE 0.85
 
 // Shared parameters
 #define TOTAL_POSSIBLE_LOCATIONS 4

@@ -28,7 +28,7 @@ void algo::inputFilter()
   }
 }
 
-void algo::calculateODdelta()
+boolean algo::calculateODdelta()
 {
   // the change in optical density
   float oDLast, oDCurrent;
@@ -48,6 +48,11 @@ void algo::calculateODdelta()
       
     oDChange[i] = oDCurrent - oDLast;
   }
+
+  if(oDChange[HbWave] == 0 && oDChange[Hb02Wave] == 0)
+    return false;
+    
+  return true;
 }
 
 BLA::Matrix<1, 2> algo::calcConc()
@@ -79,22 +84,8 @@ BLA::Matrix<1, 2> algo::calcConc()
 void algo::updateOutput()
 {
   // adding new output entry
-  if (queueCount < 20)
-  {
-    outputStO2[queueCount] = (concHbO2) / (concHb + concHbO2);
-  }
-  else if (queueCount >= 20)
-  {
-    queueCount = 0;
-    outputStO2[queueCount] = (concHbO2) / (concHb + concHbO2);
-  }
-
-  queueCount++;
-}
-
-void algo::sendUpdate()
-{
-  // This is where we will write the 20 entries to the outgoing HTTP Post
+  outputStO2[StO2entry] = (concHbO2) / (concHb + concHbO2);
+  previousStO2Value = outputStO2[StO2entry];
 }
 
 void algo::receiveUpdate()
@@ -140,17 +131,18 @@ String algo::fullLoop()
     // Preprocess
     inputFilter();
 
-    // 4. Calculate the oDChange
-    calculateODdelta();
-
-    // 5. Calculate the concentrations
-    calcConc();
-
-    // 6. Update the output values and send if needed
-    updateOutput();
-
-    // 7. Concatenates the results into a single string
-    values += ("\"%f\", ", outputStO2[StO2entry]);
+    // 4. Calculate the oDChange and returns true if there is a change
+    if(calculateODdelta()) {
+      // 5a. Calculate the concentrations
+      calcConc();
+  
+      // 6. Update the output values and send if needed
+      updateOutput();
+  
+      // 7. Concatenates the results into a single string
+      values += ("\"%f\", ", outputStO2[StO2entry]);
+    } else
+      values += ("\"%f\", ", previousStO2Value);
 
     // 8. Add timestamps to the output (hh:mm:ss)
     times += (getDateAndTime() + ", ");
