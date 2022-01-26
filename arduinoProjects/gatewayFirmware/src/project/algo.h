@@ -14,7 +14,7 @@ class algo {
     bool initial = true;
     int StO2entry = 0;
 
-    // Change this when I know a real value
+    // TODO: Change this when I know a real value (max value of the sensor)
     const float incidentIntensity = 750;
 
     // These are the storage for the intensities and the intermediates
@@ -82,8 +82,6 @@ class algo {
     void currentToLast();
 
     String fullLoop();
-
-    void readIntoIntArray();
 
     // Helper for the date and time
     String getDateAndTime();

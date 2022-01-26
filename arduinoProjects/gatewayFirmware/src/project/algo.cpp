@@ -4,6 +4,10 @@
 // Algorithm
 #include "algo.h"
 
+#include "parameters.h"
+
+extern float sensorValue;
+
 algo::algo(){}
 
 void algo::inputFilter()
@@ -93,26 +97,15 @@ void algo::sendUpdate()
   // This is where we will write the 20 entries to the outgoing HTTP Post
 }
 
-void algo::readIntoIntArray()
-{
-  int entryNum = 0;
-  char *s = (char *)Serial.read();
-  for (int i = 0; i < strlen(s); i++)
-  {
-    if (s[i] == ',')
-    {
-      i++;
-    }
-    currentIntensityArray[entryNum] = s[i];
-    entryNum++;
-  }
-}
-
 void algo::receiveUpdate()
 {
-  // Checks for incoming info in the bluetooth pipe to be received
-  // TODO
-  readIntoIntArray();
+  Serial.println(sensorValue);
+//  int entryNum = 0;
+//  for (int i = 0; i < sizeof(sensorValue) / sizeof(float); i++)
+//  {
+//    currentIntensityArray[entryNum] = sensorValue;
+//    entryNum++;
+//  }
 }
 
 void algo::currentToLast()
@@ -130,41 +123,42 @@ String algo::fullLoop()
   String times = " \"Times\" : [";
   while (StO2entry < 20)
   {
-    // Now to write a script to deal with incoming
+    // TODO: Data to make sure sensor is updated
+    delay(50);
 
-    // 1. Read first two inputs and chuck them off a cliff
-    if (initial == true)
-    {
-      receiveUpdate();
-      initial = false;
-      inputFilter();
-      continue;
-    }
-
-    // 2. First Reading needs to go to the current intensity,
-    // and shift readings to the last
-
-    currentToLast();
+//    // 1. Read first two inputs and chuck them off a cliff
+//    if (initial == true)
+//    {
+//      receiveUpdate();
+//      initial = false;
+//      inputFilter();
+//      continue;
+//    }
+//
+//    // 2. First Reading needs to go to the current intensity,
+//    // and shift readings to the last
+//
+//    currentToLast();
     receiveUpdate(); // should pull one set of measurements
 
-    // 3. Now you can start the normal loop
-    // Preprocess
-    inputFilter();
-
-    // 4. Calculate the oDChange
-    calculateODdelta();
-
-    // 5. Calculate the concentrations
-    calcConc();
-
-    // 6. Update the output values and send if needed
-    updateOutput();
-
-    // 7. Concatenates the results into a single string
-    values += ("\"%f\", ", outputStO2[StO2entry]);
-
-    // 8. Add timestamps to the output (hh:mm:ss)
-    times += (getDateAndTime() + ", ");
+//    // 3. Now you can start the normal loop
+//    // Preprocess
+//    inputFilter();
+//
+//    // 4. Calculate the oDChange
+//    calculateODdelta();
+//
+//    // 5. Calculate the concentrations
+//    calcConc();
+//
+//    // 6. Update the output values and send if needed
+//    updateOutput();
+//
+//    // 7. Concatenates the results into a single string
+//    values += ("\"%f\", ", outputStO2[StO2entry]);
+//
+//    // 8. Add timestamps to the output (hh:mm:ss)
+//    times += (getDateAndTime() + ", ");
 
     StO2entry++;
   }
@@ -174,6 +168,7 @@ String algo::fullLoop()
   output += "], ";
   output += times;
   output += "]}";
+  Serial.println("repeat");
   // Returns the String which is 20 readings
   return output;
 }
