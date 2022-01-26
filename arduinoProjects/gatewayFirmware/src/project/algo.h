@@ -30,14 +30,15 @@ class algo {
     float previousStO2Value = INITIAL_STO2_VALUE; //TODO: Talk to MacBeth to determine proper value
 
     // Wavelength constants in nanometers
+    // TODO: Determine where these variables are used
     int HbWave = 760;
     int Hb02Wave = 860;
 
     // Channel that we care about
     // u is for Hb
     // w is for Hb02
-    const float uChannel = 4;
-    const float wChannel = 6;
+    const int uChannel = U_CHANNEL;
+    const int wChannel = W_CHANNEL;
 
     // Distance between source and detector
     const float optDist = 1.25;

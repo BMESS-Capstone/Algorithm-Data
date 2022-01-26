@@ -49,7 +49,7 @@ boolean algo::calculateODdelta()
     oDChange[i] = oDCurrent - oDLast;
   }
 
-  if(oDChange[HbWave] == 0 && oDChange[Hb02Wave] == 0)
+  if(oDChange[uChannel] == 0 && oDChange[wChannel] == 0)
     return false;
     
   return true;
@@ -61,7 +61,7 @@ BLA::Matrix<1, 2> algo::calcConc()
   double frontCoeff = 1.0 / (pathLengthDelta);
 
   // change the two OD results we care about into a matrix
-  BLA::Matrix<2, 1> oDMatrix = {oDChange[HbWave], oDChange[Hb02Wave]};
+  BLA::Matrix<2, 1> oDMatrix = {oDChange[uChannel], oDChange[wChannel]};
 
   // compute the inverse matrix inputs
   BLA::Matrix<2, 2> inputMatrix = {
@@ -140,9 +140,9 @@ String algo::fullLoop()
       updateOutput();
   
       // 7. Concatenates the results into a single string
-      values += ("\"%f\", ", outputStO2[StO2entry]);
+      values += String(outputStO2[StO2entry]) + ", ";
     } else
-      values += ("\"%f\", ", previousStO2Value);
+      values += String(previousStO2Value) + ", ";
 
     // 8. Add timestamps to the output (hh:mm:ss)
     times += (getDateAndTime() + ", ");

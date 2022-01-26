@@ -17,6 +17,8 @@
 #define RIGHT_LEG 3
 
 #define SENSOR_DATA_LENGTH 6
+#define U_CHANNEL 3
+#define W_CHANNEL 5
 
 #define CONNECT_UUID "6164e702-7565-11ec-90d6-0242ac120003"
 
