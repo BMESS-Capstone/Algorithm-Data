@@ -4,9 +4,6 @@
 // Algorithm
 #include "algo.h"
 
-// Parameters
-#include "parameters.h"
-
 algo::algo(){}
 
 void algo::inputFilter()
