@@ -14,6 +14,7 @@
 
   The circuit:
   - Arduino Nano 33 BLE or custom pIRfusiX PCB board
+  - Sparkfun AS7265x Spectral Triade (SCL/SDA Conncetion)
 
   Interacts with the ESP32 BLE client firmware
 
@@ -21,7 +22,13 @@
 */
 
 #include <ArduinoBLE.h>
-#include "C:\Users\khaled.elmalawany1\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
+#include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
+
+#include <Wire.h>
+
+#include <SparkFun_AS7265X.h>
+AS7265X sensor;
+float counter = 0.0;
 
 int location = LEFT_ARM;
 
@@ -30,8 +37,8 @@ BLEService sensorService(CONNECT_UUID);
 
 // BLE Sensor Data Characteristic
 BLECharacteristic sensorChar(SENSOR_CHAR_UUID,  // standard 16-bit characteristic UUID
-                                  BLERead | BLENotify,  // remote clients will be able to get notifications if this characteristic changes
-                                  sizeof(float)*SENSOR_DATA_LENGTH); 
+                             BLERead | BLENotify,  // remote clients will be able to get notifications if this characteristic changes
+                             sizeof(float)*SENSOR_DATA_LENGTH);
 
 
 // BLE Battery Level Characteristic
@@ -46,15 +53,43 @@ int oldBatteryLevel = 0;
 long previousMillis = 0;
 
 void setup() {
-  Serial.begin(9600);    // initialize serial communication
-
   pinMode(LED_BUILTIN, OUTPUT); // initialize the built-in LED pin to indicate when a central is connected
 
   // begin initialization
   if (!BLE.begin()) {
-    Serial.println("starting BLE failed!");
-    while (1);
+    while (1) {
+      digitalWrite(LED_BUILTIN, HIGH);
+      delay(1000);
+      digitalWrite(LED_BUILTIN, LOW);
+      delay(200);
+    }
   }
+
+  if (sensor.begin() == false)
+  {
+    while (1) {
+      digitalWrite(LED_BUILTIN, HIGH);
+      delay(100);
+      digitalWrite(LED_BUILTIN, LOW);
+      delay(100);
+    }
+  }
+
+  //Once the sensor is started we can increase the I2C speed
+  Wire.setClock(400000);
+
+  // Note: AS7265X_MEASUREMENT_MODE_6CHAN_ONE_SHOT is the default
+  sensor.setMeasurementMode(AS7265X_MEASUREMENT_MODE_6CHAN_CONTINUOUS); //All 6 channels on all devices
+
+  //0-255 valid but 0 seems to cause the sensors to read very slowly
+  //(1+1)*2.8ms = 5.6ms per reading
+  //But we need two integration cycles so 89Hz is aproximately the fastest read rate
+  sensor.setIntegrationCycles(1);
+
+  //Only turn on IR bulb
+  //IR on board is rated at 875 nm while standalone IR is rate at 940 nm
+  sensor.enableBulb(AS7265x_LED_IR);
+
 
   /* Set a local name for the BLE device
      This name will appear in advertising packets
@@ -74,8 +109,6 @@ void setup() {
 
   // start advertising
   BLE.advertise();
-
-  Serial.println("Bluetooth device active, waiting for connections...");
 }
 
 void loop() {
@@ -84,9 +117,6 @@ void loop() {
 
   // if a central is connected to the peripheral:
   if (central) {
-    Serial.print("Connected to central: ");
-    // print the central's BT address:
-    Serial.println(central.address());
     // turn on the LED to indicate the connection:
     digitalWrite(LED_BUILTIN, HIGH);
     previousMillis = millis();
@@ -108,8 +138,6 @@ void loop() {
     }
     // when the central disconnects, turn off the LED:
     digitalWrite(LED_BUILTIN, LOW);
-    Serial.print("Disconnected from central: ");
-    Serial.println(central.address());
 
     // Reset the location
     batteryChar.writeValue(location);
@@ -127,9 +155,9 @@ void updateBatteryLevel() {
 }
 
 void readSensor() {
-  // TODO: Update to proper code
-  delay(50);
-  for (int i = 0; i < SENSOR_DATA_LENGTH; i++) {
-    sensorValue[i] = millis();
-  }
+  //Wait two integration cycles to get all values
+  while (sensor.dataAvailable() == false) {} //Do nothing
+
+  sensorValue[0] = sensor.getCalibratedU();
+  sensorValue[1] = sensor.getCalibratedW();
 }
