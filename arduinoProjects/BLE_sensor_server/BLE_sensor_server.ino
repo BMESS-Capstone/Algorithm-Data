@@ -123,12 +123,7 @@ void updateBatteryLevel() {
   int battery = analogRead(BATTERY_PIN);
   int batteryLevel = map(battery, 0, 1023, 0, 100);
 
-  if (batteryLevel != oldBatteryLevel) {      // if the battery level has changed
-    Serial.print("Battery Level % is now: "); // print it
-    Serial.println(batteryLevel);
-    batteryChar.writeValue(batteryLevel);  // and update the battery level characteristic
-    oldBatteryLevel = batteryLevel;           // save the level for next comparison
-  }
+  batteryChar.writeValue(batteryLevel);  // and update the battery level characteristic
 }
 
 void readSensor() {
