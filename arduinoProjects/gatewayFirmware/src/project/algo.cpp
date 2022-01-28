@@ -59,7 +59,7 @@ boolean algo::calculateODdelta()
 BLA::Matrix<1, 2> algo::calcConc()
 {
   // get the constant
-  double frontCoeff = 1.0 / (pathLengthDelta);
+  double frontCoeff = 1.0 / (sourceDetectorDistance);
 
   // change the two OD results we care about into a matrix
   BLA::Matrix<2, 1> oDMatrix = {oDChange[uChannel], oDChange[wChannel]};

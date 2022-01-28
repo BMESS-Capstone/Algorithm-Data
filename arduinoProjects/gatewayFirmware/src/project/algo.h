@@ -40,8 +40,8 @@ class algo {
     const int uChannel = U_CHANNEL;
     const int wChannel = W_CHANNEL;
 
-    // Distance between source and detector
-    const float optDist = 1.25;
+    // Distance between the sensors
+    const float optDist = 1;
 
     // Extinction coefficent matrix
     // These are estimates by interpolation to get us started ***
@@ -53,8 +53,8 @@ class algo {
     const BLA::Matrix<2, 2> extCoeff = {0.38, 0.14, 0.18, 0.30};
 
     // Pathlength difference
-    // We can assume it is a constant as it should not change reading that much
-    const float pathLengthDelta = 1.0;
+    // We have this up to be 12.5mm
+    const float sourceDetectorDistance = 0.0125;
 
     // Differential pathlength factor
     // These are estimates which were interpolated from the research
