@@ -318,22 +318,31 @@ LOOP:
 }
 
 void sendMessage(String message) {
+    // We could add an if statement here
+    if (WFCon.connect() == true) {
+      var = 1;
+    }
+    else if (CLCon.connect() == true) {
+      var = 2;
+    }
+    else if (STCon.connect() == true) {
+      var = 3;
+    }
+    else
+      var = 0;
   switch (var) {
     case 1:
       // Send the message
-      WFCon.connect();
       WFCon.send(message);
       WFCon.disconnect();
       break;
 
     case 2:
-      CLCon.connect();
       CLCon.send(message);
       CLCon.disconnect();
       break;
 
     case 3:
-      STCon.connect();
       STCon.send(message);
       STCon.disconnect();
       break;
@@ -341,20 +350,6 @@ void sendMessage(String message) {
     default:
       Serial.println("No connection to Internet");
       // If we want more lights and sirens, put them here
-
-      // We could add an if statement here
-      if (WFCon.connect() == true) {
-        var = 1;
-        break;
-      }
-      if (CLCon.connect() == true) {
-        var = 2;
-        break;
-      }
-      if (STCon.connect() == true) {
-        var = 3;
-        break;
-      }
   }
 }
 //*******************End of Code Block******************************
