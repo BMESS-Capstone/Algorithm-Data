@@ -28,7 +28,8 @@ boolean WifiCON::connect() {
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
+  int counter = 0;
+  while (WiFi.status() != WL_CONNECTED && counter<20) {
     delay(500);
     Serial.print(".");
   }
