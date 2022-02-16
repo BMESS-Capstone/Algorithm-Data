@@ -4,6 +4,7 @@
 // Parameters only for Sensor
 #define BATTERY_INTERVAL_MS 2000
 #define BATTERY_PIN A0
+#define LED_RED_PIN 18
 
 // Parameters only for Gateway
 #define ONBOARD_LED 2
