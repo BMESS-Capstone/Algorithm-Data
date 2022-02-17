@@ -18,7 +18,8 @@
 */
 
 #include <ArduinoBLE.h>
-#include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
+// #include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
+#include "/home/pi/Documents/Algorithm-Data/arduinoProjects/parameters.h"
 
 #include <Wire.h>
 
@@ -49,26 +50,25 @@ int oldBatteryLevel = 0;
 long previousMillis = 0;
 
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT); // initialize the built-in LED pin to indicate when a central is connected
+  // initialize the built-in LED pin to indicate when a central is connected
+  // Note: 4-pin RGB is common cathode
+  pinMode(LED_PIN_RED, OUTPUT);
+  pinMode(LED_PIN_GREEN, OUTPUT);
+  pinMode(LED_PIN_BLUE, OUTPUT);
+  digitalWrite(LED_PIN_RED, OFF);
+  digitalWrite(LED_PIN_GREEN, OFF);
+  digitalWrite(LED_PIN_BLUE, OFF);
 
   // begin initialization
   if (!BLE.begin()) {
-    while (1) {
-      digitalWrite(LED_BUILTIN, HIGH);
-      delay(1000);
-      digitalWrite(LED_BUILTIN, LOW);
-      delay(200);
-    }
+    digitalWrite(LED_PIN_BLUE, ON);
+    while (1);
   }
 
   if (sensor.begin() == false)
   {
-    while (1) {
-      digitalWrite(LED_BUILTIN, HIGH);
-      delay(100);
-      digitalWrite(LED_BUILTIN, LOW);
-      delay(100);
-    }
+    digitalWrite(LED_PIN_RED, ON);
+    while (1);
   }
 
   //Once the sensor is started we can increase the I2C speed
@@ -114,7 +114,7 @@ void loop() {
   // if a central is connected to the peripheral:
   if (central) {
     // turn on the LED to indicate the connection:
-    digitalWrite(LED_BUILTIN, HIGH);
+    digitalWrite(LED_PIN_GREEN, ON);
     previousMillis = millis();
 
     // while the central is connected:
@@ -133,7 +133,7 @@ void loop() {
       }
     }
     // when the central disconnects, turn off the LED:
-    digitalWrite(LED_BUILTIN, LOW);
+    digitalWrite(LED_PIN_GREEN, OFF);
 
     // Reset the location
     batteryChar.writeValue(location);
