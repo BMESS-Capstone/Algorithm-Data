@@ -3,14 +3,10 @@
 
   Service:
   - sensorService (service encapsulating various characteristics)
-  - connectService (service to ensure the device is unique)
 
   Characterstics for sensorService:
   - sensorChar (sensor value output)
   - batteryChar (battery voltage remaining)
-
-  Characterstics for connectService:
-  - connectChar (used for connection algorithm)
 
   The circuit:
   - Arduino Nano 33 BLE or custom pIRfusiX PCB board
