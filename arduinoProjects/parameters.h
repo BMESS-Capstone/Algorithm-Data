@@ -4,11 +4,13 @@
 // Parameters only for Sensor
 #define BATTERY_INTERVAL_MS 2000
 #define BATTERY_PIN A0
-#define LED_PIN_RED 18 //verified
-#define LED_PIN_GREEN 3 //verified
-#define LED_PIN_BLUE 5 //verified
+#define LED_PIN_RED A4 //verified
+#define LED_PIN_GREEN D3 //verified
+#define LED_PIN_BLUE D5 //verified
 #define ON LOW
 #define OFF HIGH
+#define SDA_PIN 7 //verified with Arduino Nano 33 BLE PCB schematic
+#define SCL_PIN 8 //verified with Arduino Nano 33 BLE PCB schematic
 
 // Parameters only for Gateway
 #define ONBOARD_LED 2
