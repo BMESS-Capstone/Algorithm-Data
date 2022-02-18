@@ -12,19 +12,27 @@
   - Arduino Nano 33 BLE or custom pIRfusiX PCB board
   - Sparkfun AS7265x Spectral Triade (SCL/SDA Conncetion)
 
+  Pre-requisite:
+  - Need to edit add the following function in Wire.cpp and respective definition in Wire.h
+        void arduino::MbedI2C::begin(int sda, int scl) {
+          _sda = digitalPinToPinName(sda);
+          _scl = digitalPinToPinName(scl);
+          master = new mbed::I2C(_sda, _scl);
+        }
+
   Interacts with the ESP32 BLE client firmware
 
   Author: Khaled Elmalawany
 */
 
 #include <ArduinoBLE.h>
-// #include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
-#include "/home/pi/Documents/Algorithm-Data/arduinoProjects/parameters.h"
+#include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
+//#include "/home/pi/Documents/Algorithm-Data/arduinoProjects/parameters.h"
 
 #include <Wire.h>
 
 #include <SparkFun_AS7265X.h>
-AS7265X sensor;
+AS726X sensor;
 float counter = 0.0;
 
 int location = LEFT_ARM;
@@ -52,7 +60,7 @@ long previousMillis = 0;
 void setup() {
   // initialize the built-in LED pin to indicate when a central is connected
   // Note: 4-pin RGB is common cathode
-  pinMode(LED_PIN_RED, OUTPUT);
+  pinMode(A4, OUTPUT);
   pinMode(LED_PIN_GREEN, OUTPUT);
   pinMode(LED_PIN_BLUE, OUTPUT);
   digitalWrite(LED_PIN_RED, OFF);
@@ -65,6 +73,7 @@ void setup() {
     while (1);
   }
 
+  Wire.begin(SDA_PIN, SCL_PIN);
   if (sensor.begin() == false)
   {
     digitalWrite(LED_PIN_RED, ON);
