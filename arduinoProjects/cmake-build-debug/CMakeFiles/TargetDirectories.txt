@@ -1,0 +1,3 @@
+/Users/jeffroszell/Documents/School/Capstone/Algorithm-Data/arduinoProjects/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/jeffroszell/Documents/School/Capstone/Algorithm-Data/arduinoProjects/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/jeffroszell/Documents/School/Capstone/Algorithm-Data/arduinoProjects/cmake-build-debug/CMakeFiles/arduinoProjects.dir

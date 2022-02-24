@@ -1,6 +1,5 @@
 // Main Arduino
 #include <Arduino.h>
-
 // Algorithm
 #include "algo.h"
 

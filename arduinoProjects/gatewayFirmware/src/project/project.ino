@@ -320,35 +320,36 @@ LOOP:
 void sendMessage(String message) {
     // We could add an if statement here
     if (WFCon.connect() == true) {
-      var = 1;
-    }
-    else if (CLCon.connect() == true) {
       var = 2;
     }
-    else if (STCon.connect() == true) {
+    else if (CLCon.connect() == true) {
       var = 3;
     }
+    else if (STCon.connect() == true) {
+      var = 4;
+    }
     else
-      var = 0;
+      var = 1;
   switch (var) {
-    case 1:
+    case 2:
       // Send the message
       WFCon.send(message);
       WFCon.disconnect();
       break;
 
-    case 2:
+    case 3:
       CLCon.send(message);
       CLCon.disconnect();
       break;
 
-    case 3:
+    case 4:
       STCon.send(message);
       STCon.disconnect();
       break;
 
-    default:
+    case 1:
       Serial.println("No connection to Internet");
+      // Write to the SD
       // If we want more lights and sirens, put them here
   }
 }
