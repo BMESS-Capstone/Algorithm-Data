@@ -105,7 +105,7 @@ void algo::currentToLast()
     lastIntensityArray[i] = currentIntensityArray[i];
 }
 
-String algo::fullLoop(int deviceLocation)
+String algo::fullLoop(int deviceLocation, int oxyValue)
 {
   String output = "{";
   String location = " \"DeviceLocation\" : [";
@@ -165,6 +165,9 @@ String algo::fullLoop(int deviceLocation)
   switchSensor = true;
   // Returns the String which is SENSOR_READINGS readings
   return output;
+
+  //Update display value
+  oxyValue = outputStO2[0];
 }
 
 // Helper for the date and time

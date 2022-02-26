@@ -3,21 +3,42 @@
 //
 
 #include "screen.h"
+void Screen(int value){
 
-void screen::check_battery(int life){
+    // Initialize variables
+    bool connections [] = {true,false,false};
+    int in = 1;
+    int life = 100;
+
+    // Startup the device
+    Serial.begin(115200);
+
+    // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+    if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+        Serial.println(F("SSD1306 allocation failed"));
+        for(;;); // Don't proceed, loop forever
+    }
+    // Show initial display buffer contents on the screen --
+    // the library initializes this with an Adafruit splash screen.
+    display.display();
+    delay(2000);
+    display.clearDisplay();
+}
+
+void Screen::displayBattery(){
     if (life <= 20)
         display.drawBitmap(110,0,battery, 18, 16, 1);
 }
 
-void screen::communication_display(bool out [], int in){
+void Screen::displayConn(){
     int out_loc [] = {108,20};
     int in_loc [] = {107, 44};
 
-    if (out[0] == true)       // connected to wifi
+    if (this->connections[0] == true)       // connected to wifi
         display.drawBitmap(out_loc[0],out_loc[1], wifi, 20, 16, 1);
-    else if (out[1] == true)  // connected to satellite
+    else if (this->connections[1] == true)  // connected to satellite
         display.drawBitmap(out_loc[0],out_loc[1], satellite, 16, 20, 1);
-    else if (out[2] == true)  // connected to cellular
+    else if (this->connections[2] == true)  // connected to cellular
         display.drawBitmap(out_loc[0],out_loc[1], cellular, 16, 16, 1);
 
     // displays each connected bluetooth
@@ -30,7 +51,7 @@ void screen::communication_display(bool out [], int in){
     }
 }
 
-void screen::oxygen_level(int value, int counter) {
+void Screen::displayOxy(int value) {
     display.setTextSize(3);
     display.setTextColor(WHITE);
     display.setCursor(0,20);
@@ -44,13 +65,20 @@ void screen::oxygen_level(int value, int counter) {
         display.println("Stable");
     }
     else if(value <= 85 && value > 70){
-        if (counter%4 == 0 || (counter - 1)%4 == 0)
-            display.println("Caution");
+        display.println("Caution");
     }
     else if(value <= 70 && value >= 0){
-        if (counter%2 == 0)
-            display.println("Warning");
+        display.println("Warning");
     }
     else
         display.println("Error");
+}
+
+void Screen::showDisplay(int value) {
+    displayBattery();
+    displayConn();
+    displayOxy(value);
+    display.display();
+    delay(400);
+    display.clearDisplay();
 }

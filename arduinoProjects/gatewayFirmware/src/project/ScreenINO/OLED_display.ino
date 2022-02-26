@@ -150,6 +150,12 @@ void check_battery(int life){
     display.drawBitmap(110,0,battery, 18, 16, 1);
 }
 
+/**
+ *
+ * @param out This is the array which contains the bools to tell whether or not to
+ * turn on specific parts of the display
+ * @param in This is the counter for how many bluetooth sensors are hooked up
+ */
 void communication_display(bool out [], int in){
   int out_loc [] = {108,20};
   int in_loc [] = {107, 44};

@@ -45,6 +45,11 @@ const char *serverName = "the Server Address... Replace this";
 bool initial = true;
 bool RTCset = false;
 
+// Screen variables
+#include "screen.h"
+Screen screen;
+static int oxyValue;
+
 int StO2entry = 0;
 
 //***********Bluetooth Global Variables, Classes and Functions*******************
@@ -199,10 +204,12 @@ void setup()
 {
   Serial.begin(115200);
 
-  //  // Objects of each connection type
-  //  CLCon = CellCON(APN, URL, CONTENT_TYPE);
-  //  WFCon = WifiCON(ssid, password, serverName);
-  //  STCon = SatCON();
+  // Objects of each connection type
+  CLCon = CellCON(APN, URL, CONTENT_TYPE);
+  WFCon = WifiCON(ssid, password, serverName);
+  STCon = SatCON();
+  // Object of screen type
+  screen = Screen();
   //
   //  while (RTCset == false) {
   //    // Add the RTC update here
@@ -301,8 +308,9 @@ LOOP:
         goto LOOP;
     } else {
       // Do a loop until storage is full
-      String message = ALGO.fullLoop(deviceIndex);
+      String message = ALGO.fullLoop(deviceIndex, oxyValue);
       Serial.println(message);
+      screen.showDisplay(oxyValue);
       //sendMessage(message);
     }
   } else {
@@ -315,7 +323,11 @@ LOOP:
     BLEDevice::getScan()->start(1, false); // this is just to start scan after disconnect
   }
   //***************************END OF BLUETOOTH LOOP**********************************
+
+  //***************************START OF DISPLAY LOOP**********************************
 }
+
+
 
 void sendMessage(String message) {
     // We could add an if statement here
