@@ -10,7 +10,7 @@ boolean switchSensor;
 
 // Algorithm
 #include "algo.h"
-algo ALGO = algo();
+static algo ALGO = algo();
 
 // Communication case variable
 // 1 is wifi connection
@@ -23,32 +23,33 @@ int var = 1;
 #include "WifiCON.h"
 #include <WiFi.h>
 #include <HTTPClient.h>
-const char *ssid = "NetworkName";
-const char *password = "Password";
-WifiCON WFCon;
+static const char *ssid = "NetworkName";
+static const char *password = "Password";
+static WifiCON WFCon;
 
 // Cell Settings
 #include "CellCON.h"
-const char *APN = "Some APN Settings";
-const char *URL = "http://www.google.com";
-const char *CONTENT_TYPE = "application/json";
-CellCON CLCon;
+static const char *APN = "Some APN Settings";
+static const char *URL = "http://www.google.com";
+static const char *CONTENT_TYPE = "application/json";
+static CellCON CLCon;
 
 // Sat Settings
 #include "SatCON.h"
-SatCON STCon;
+static SatCON STCon;
 
 // Server Settings
-const char *serverName = "the Server Address... Replace this";
+static const char *serverName = "the Server Address... Replace this";
 
 // Change to false ***
-bool initial = true;
-bool RTCset = false;
+static bool initial = true;
+static bool RTCset = false;
 
 // Screen variables
 #include "screen.h"
-Screen screen;
+static Screen screen;
 static int oxyValue;
+static bool connBools[];
 
 int StO2entry = 0;
 
@@ -209,7 +210,7 @@ void setup()
   WFCon = WifiCON(ssid, password, serverName);
   STCon = SatCON();
   // Object of screen type
-  screen = Screen();
+  screen = Screen(oxyValue,connBools);
   //
   //  while (RTCset == false) {
   //    // Add the RTC update here
@@ -307,11 +308,14 @@ LOOP:
       if (!connectToServer(myDevices[deviceIndex]))
         goto LOOP;
     } else {
-      // Do a loop until storage is full
+
+
+      // Go through normal procedure
       String message = ALGO.fullLoop(deviceIndex, oxyValue);
       Serial.println(message);
       screen.showDisplay(oxyValue);
-      //sendMessage(message);
+      sendMessage(message);
+
     }
   } else {
     if (connectionCounter > TOTAL_POSSIBLE_LOCATIONS + 1) {
@@ -331,17 +335,30 @@ LOOP:
 
 void sendMessage(String message) {
     // We could add an if statement here
+    // if(haveConnection == true)
+    // { try to send all the old messages }
     if (WFCon.connect() == true) {
-      var = 2;
+        var = 2;
+        connBool[0] = true;
+        connBool[1] = false;
+        connBool[2] = false;
+    } else if (CLCon.connect() == true) {
+        var = 3;
+        connBool[0] = false;
+        connBool[1] = true;
+        connBool[2] = false;
+    } else if (STCon.connect() == true) {
+        var = 4;
+        connBool[0] = false;
+        connBool[1] = false;
+        connBool[2] = true;
+    } else {
+        var = 1;
+        connBool[0] = false;
+        connBool[1] = false;
+        connBool[2] = false;
     }
-    else if (CLCon.connect() == true) {
-      var = 3;
-    }
-    else if (STCon.connect() == true) {
-      var = 4;
-    }
-    else
-      var = 1;
+
   switch (var) {
     case 2:
       // Send the message
@@ -361,7 +378,9 @@ void sendMessage(String message) {
 
     case 1:
       Serial.println("No connection to Internet");
-      // Write to the SD
+      // SDH.store(message);
+      // have bool that tracks whether we couldn't find signal
+      // bool haveConnection = false;
       // If we want more lights and sirens, put them here
   }
 }

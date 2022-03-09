@@ -38,7 +38,6 @@ boolean WifiCON::connect() {
   Serial.println("WiFi connected.");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-  return true;
 }
 
 boolean WifiCON::disconnect() {

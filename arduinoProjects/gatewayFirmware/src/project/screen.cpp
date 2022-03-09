@@ -3,10 +3,10 @@
 //
 
 #include "screen.h"
-void Screen(int value){
+void Screen(int& value, bool& connBools[]){
 
     // Initialize variables
-    bool connections [] = {true,false,false};
+    bool connections [] = connBools;
     int in = 1;
     int life = 100;
 

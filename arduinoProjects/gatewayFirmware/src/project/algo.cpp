@@ -7,6 +7,7 @@ extern float sensorValue[SENSOR_DATA_LENGTH];
 extern int batteryValue;
 extern boolean isUpdated;
 extern boolean switchSensor;
+int tripcounter = 0;
 
 algo::algo() {
   for (int i = 0; i < SENSOR_DATA_LENGTH; i++) {
@@ -105,9 +106,10 @@ void algo::currentToLast()
     lastIntensityArray[i] = currentIntensityArray[i];
 }
 
-String algo::fullLoop(int deviceLocation, int oxyValue)
+String algo::fullLoop(int deviceLocation, int& oxyValue)
 {
   String output = "{";
+  String tripID = "\"tripID\" : ";
   String location = " \"DeviceLocation\" : [";
   String values = " \"Values\" : [";
   String times = " \"Times\" : [";
@@ -155,6 +157,7 @@ String algo::fullLoop(int deviceLocation, int oxyValue)
   StO2entry = 0;
   output += location + String(deviceLocation) + ", ";
   output += "], ";
+  output += tripID + String(tripcounter) + ", ";
   output += values;
   output += "], ";
   output += times;
@@ -163,11 +166,13 @@ String algo::fullLoop(int deviceLocation, int oxyValue)
   output += "]}";
 
   switchSensor = true;
-  // Returns the String which is SENSOR_READINGS readings
-  return output;
+  tripcounter++;
 
   //Update display value
   oxyValue = outputStO2[0];
+
+  // Returns the String which is SENSOR_READINGS readings
+  return output;
 }
 
 // Helper for the date and time

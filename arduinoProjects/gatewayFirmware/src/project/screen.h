@@ -133,6 +133,7 @@ public:
     void displayConn();
 private:
     bool connections [];
+    int
     int in;
     int life;
 };

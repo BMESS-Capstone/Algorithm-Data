@@ -14,19 +14,12 @@ boolean SatCON::connect() {
   while (!Serial); // Wait for the user to open the serial monitor
   Serial.println(F("Iridium SBD Time I2C"));
 
-  //empty the serial buffer
-  while (Serial.available() > 0) Serial.read();
-
-  //wait for the user to press any key before beginning
-  Serial.println(F("Press any key to start example."));
-  while (Serial.available() == 0);
-
   //clean up
   while (Serial.available() > 0) Serial.read();
 
   // Start the I2C wire port connected to the satellite modem
   Wire.begin();
-//  Wire.setClock(400000); //Set I2C clock speed to 400kHz
+  Wire.setClock(400000); //Set I2C clock speed to 400kHz
 
   // Check that the Qwiic Iridium is attached
   if (!modem.isConnected())
@@ -55,15 +48,14 @@ boolean SatCON::connect() {
   Serial.println(F("Starting modem..."));
   modem.setPowerProfile(IridiumSBD::USB_POWER_PROFILE); // Assume 'USB' power (slow recharge)
   err = modem.begin();
-  if (err != ISBD_SUCCESS)
+  if (err != ISBD_SUCCESS)                                     
   {
     Serial.print(F("Begin failed: error "));
     Serial.println(err);
     if (err == ISBD_NO_MODEM_DETECTED)
       Serial.println(F("No modem detected: check wiring."));
   }
-
-  return modem.isConnected();
+  return;
 }
 
 
@@ -96,7 +88,7 @@ boolean SatCON::send(String message) {
   // Send the message
   Serial.println(F("Trying to send the message.  This might take several minutes."));
   // This is where the message should be sent
-  err = modem.sendSBDText(message);
+  err = modem.sendSBDText(message.c_str());
   if (err != ISBD_SUCCESS)
   {
     Serial.print(F("sendSBDText failed: error "));
