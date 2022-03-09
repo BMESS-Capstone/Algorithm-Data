@@ -3,10 +3,13 @@
 //
 
 #include "screen.h"
-void Screen(int& value, bool& connBools[]){
+
+Screen::Screen(int& value, bool connBools[]){
 
     // Initialize variables
-    bool connections [] = connBools;
+    connections[0] = connBools[0];
+    connections[1] = connBools[1];
+    connections[2] = connBools[2];
     int in = 1;
     int life = 100;
 
@@ -34,7 +37,7 @@ void Screen::displayConn(){
     int out_loc [] = {108,20};
     int in_loc [] = {107, 44};
 
-    if (this->connections[0] == true)       // connected to wifi
+    if (connections[0] == true)       // connected to wifi
         display.drawBitmap(out_loc[0],out_loc[1], wifi, 20, 16, 1);
     else if (this->connections[1] == true)  // connected to satellite
         display.drawBitmap(out_loc[0],out_loc[1], satellite, 16, 20, 1);
@@ -74,7 +77,10 @@ void Screen::displayOxy(int value) {
         display.println("Error");
 }
 
-void Screen::showDisplay(int value) {
+void Screen::showDisplay(int value, bool bools[]) {
+    connections[0] = bools[0];
+    connections[1] = bools[1];
+    connections[2] = bools[2];
     displayBattery();
     displayConn();
     displayOxy(value);

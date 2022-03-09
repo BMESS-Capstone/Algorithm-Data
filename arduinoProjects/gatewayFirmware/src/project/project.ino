@@ -211,28 +211,29 @@ void setup()
   STCon = SatCON();
   // Object of screen type
   screen = Screen(oxyValue,connBools);
-  //
-  //  while (RTCset == false) {
-  //    // Add the RTC update here
-  //    // hh:mm:ss
-  //    if (WFCon.connect() == true) {
-  //      //set RTC using wifi
-  //
-  //      RTCset = true;
-  //    }
-  //    else if (CLCon.connect() == true) {
-  //      //set RTC using cell
-  //
-  //      RTCset = true;
-  //    }
-  //    else if (STCon.connect() == true) {
-  //      //set RTC using sat
-  //
-  //      RTCset = true;
-  //    }
-  //    else
-  //      continue;
-  //  }
+
+    while (RTCset == false) {
+      // Add the RTC update here
+      // hh:mm:ss
+      if (WFCon.connect() == true) {
+        //set RTC using wifi
+        String time = WFCon.getTime();
+        String timeSeperate[] = new String[3];
+        RTCset = true;
+      }
+      else if (CLCon.connect() == true) {
+        //set RTC using cell
+        String time = CLCon.getTime();
+        RTCset = true;
+      }
+      else if (STCon.connect() == true) {
+        //set RTC using sat
+        String time = STCon.getTime();
+        RTCset = true;
+      }
+      else
+        continue;
+    }
 
   //BLE setup
   pinMode(ONBOARD_LED, OUTPUT);
@@ -313,7 +314,7 @@ LOOP:
       // Go through normal procedure
       String message = ALGO.fullLoop(deviceIndex, oxyValue);
       Serial.println(message);
-      screen.showDisplay(oxyValue);
+      screen.showDisplay(oxyValue, connBools);
       sendMessage(message);
 
     }

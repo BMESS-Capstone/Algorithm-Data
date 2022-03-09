@@ -122,18 +122,18 @@ const unsigned char battery[] PROGMEM = {
 class Screen {
 public:
     // Constructor
-    void Screen();
+    Screen();
+    Screen(int& value, bool connBools[]);
 
     // The display refresher
-    void showDisplay(int value);
+    void showDisplay(int value, bool bools[]);
 
     // Each part of the display
     void displayOxy(int value);
     void displayBattery();
     void displayConn();
 private:
-    bool connections [];
-    int
+    bool connections [3];
     int in;
     int life;
 };
