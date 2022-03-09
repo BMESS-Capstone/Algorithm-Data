@@ -169,7 +169,7 @@ String algo::fullLoop(int deviceLocation, int& oxyValue)
   tripcounter++;
 
   //Update display value
-  oxyValue = outputStO2[0];
+  oxyValue = calcNewOxy();
 
   // Returns the String which is SENSOR_READINGS readings
   return output;
@@ -188,4 +188,13 @@ String algo::getDateAndTime()
   strftime(time, 50, "%T", curr_tm);
   String toReturn = time;
   return toReturn;
+}
+
+int algo::calcNewOxy(){
+    int sum = 0;
+    for(int i=0;i<20;i++){
+        sum+=outputStO2[i];
+    }
+    int average = sum/20;
+    return int(average);
 }

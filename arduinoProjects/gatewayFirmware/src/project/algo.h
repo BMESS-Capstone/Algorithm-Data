@@ -83,6 +83,8 @@ class algo {
 
     // Helper for the date and time
     String getDateAndTime();
+
+    int calcNewOxy();
 };
 
 #endif
