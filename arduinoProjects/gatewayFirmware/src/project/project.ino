@@ -218,7 +218,7 @@ void setup()
       if (WFCon.connect() == true) {
         //set RTC using wifi
         String time = WFCon.getTime();
-        String timeSeperate[] = new String[3];
+        
         RTCset = true;
       }
       else if (CLCon.connect() == true) {
