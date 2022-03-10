@@ -15,7 +15,8 @@ class SatCON {
     boolean connect();
     boolean disconnect();
     boolean send(String message);
-    String getTime();
+    std::vector<String> getTime();
+    std::vector<String> split(String source, char delim);
   private:
     IridiumSBD modem = IridiumSBD(IridiumWire);
 };

@@ -96,7 +96,7 @@ boolean SatCON::send(String message) {
   // Send the message
   Serial.println(F("Trying to send the message.  This might take several minutes."));
   // This is where the message should be sent
-  err = modem.sendSBDText(message);
+  err = modem.sendSBDText(message.c_str());
   if (err != ISBD_SUCCESS)
   {
     Serial.print(F("sendSBDText failed: error "));
@@ -121,7 +121,7 @@ boolean SatCON::send(String message) {
 
 }
 
-String SatCON::getTime() {
+std::vector<String> SatCON::getTime() {
   // Should be in format HH:MM:SS
 
   struct tm t;
@@ -155,5 +155,29 @@ String SatCON::getTime() {
   timeStr += String(t.tm_sec);
 
 
-  return timeStr;
+  return split(timeStr, ':');
+}
+
+std::vector<String> SatCON::split(String source, char delim){ 
+
+  std::vector<String> result = std::vector<String>();
+
+  int ind1;
+  int ind2;
+  String hours;
+  String minutes;
+  String seconds;
+
+
+  ind1 = source.indexOf(delim);
+  hours = source.substring(0,ind1);
+  ind2 = source.indexOf(delim, ind1+1);
+  minutes = source.substring(ind1+1, ind2);
+  seconds = source.substring(ind2+1);
+
+  result.push_back(hours);
+  result.push_back(minutes);
+  result.push_back(seconds);
+
+  return result;
 }

@@ -49,7 +49,7 @@ static bool RTCset = false;
 #include "screen.h"
 static Screen screen;
 static int oxyValue;
-static bool connBools[];
+static bool connBool[];
 
 int StO2entry = 0;
 
@@ -210,25 +210,30 @@ void setup()
   WFCon = WifiCON(ssid, password, serverName);
   STCon = SatCON();
   // Object of screen type
-  screen = Screen(oxyValue,connBools);
+  screen = Screen(oxyValue,connBool);
 
     while (RTCset == false) {
       // Add the RTC update here
       // hh:mm:ss
       if (WFCon.connect() == true) {
         //set RTC using wifi
-        String time = WFCon.getTime();
-        
+        std::vector<String> time = WFCon.getTime();
+        // Just need the specifics to change time here...
+
         RTCset = true;
       }
       else if (CLCon.connect() == true) {
         //set RTC using cell
-        String time = CLCon.getTime();
+        std::vector<String> time = CLCon.getTime();
+        // Just need the specifics to change time here...
+
         RTCset = true;
       }
       else if (STCon.connect() == true) {
         //set RTC using sat
-        String time = STCon.getTime();
+        std::vector<String> time = STCon.getTime();
+        // Just need the specifics to change time here...
+
         RTCset = true;
       }
       else
@@ -314,7 +319,7 @@ LOOP:
       // Go through normal procedure
       String message = ALGO.fullLoop(deviceIndex, oxyValue);
       Serial.println(message);
-      screen.showDisplay(oxyValue, connBools);
+      screen.showDisplay(oxyValue, connBool);
       sendMessage(message);
 
     }

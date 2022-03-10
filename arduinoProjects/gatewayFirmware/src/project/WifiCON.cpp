@@ -85,7 +85,7 @@ boolean WifiCON::send(String message) {
   }
 }
 
-String WifiCON::getTime() {
+std::vector<String> WifiCON::getTime() {
   // Should be in format HH:MM:SS
 
   // Start the time client
@@ -105,5 +105,29 @@ String WifiCON::getTime() {
   Serial.println(formattedTime);
 
   // Return the time to be added
-  return formattedTime;
+  return split(formattedTime,':');
+}
+
+std::vector<String> WifiCON::split(String source, char delim){ 
+
+std::vector<String> result = std::vector<String>();
+
+int ind1;
+int ind2;
+String hours;
+String minutes;
+String seconds;
+
+
+ind1 = source.indexOf(delim);
+hours = source.substring(0,ind1);
+ind2 = source.indexOf(delim, ind1+1);
+minutes = source.substring(ind1+1, ind2);
+seconds = source.substring(ind2+1);
+
+result.push_back(hours);
+result.push_back(minutes);
+result.push_back(seconds);
+
+return result;
 }

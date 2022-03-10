@@ -10,7 +10,8 @@ class WifiCON {
     boolean connect();
     boolean disconnect();
     boolean send(String message);
-    String getTime();
+    std::vector<String> getTime();
+    std::vector<String> WifiCON::split(String source, char delim);
 
   private:
     const char *ssid = nullptr;

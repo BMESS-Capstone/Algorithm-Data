@@ -127,7 +127,7 @@ boolean CellCON::send(String message) {
   }
 }
 
-String CellCON::getTime() {
+std::vector<String> CellCON::getTime() {
   // Should be in format HH:MM:SS
 
   softSerial.begin(19200, SWSERIAL_8N1, RX_PIN, TX_PIN);  // the GPRS baud rate
@@ -153,5 +153,29 @@ String CellCON::getTime() {
   // Hour starts on 9 and second ends on 16
   String toReturn = mystr.substring(9, 16);
 
-  return toReturn;
+  return split(toReturn,':');
+}
+
+std::vector<String> CellCON::split(String source, char delim){ 
+
+  std::vector<String> result = std::vector<String>();
+
+  int ind1;
+  int ind2;
+  String hours;
+  String minutes;
+  String seconds;
+
+
+  ind1 = source.indexOf(delim);
+  hours = source.substring(0,ind1);
+  ind2 = source.indexOf(delim, ind1+1);
+  minutes = source.substring(ind1+1, ind2);
+  seconds = source.substring(ind2+1);
+
+  result.push_back(hours);
+  result.push_back(minutes);
+  result.push_back(seconds);
+
+  return result;
 }
