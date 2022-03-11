@@ -35,7 +35,7 @@ static const unsigned char wifi[] PROGMEM = {
         B00000000,B01100000,B00000000
 };
 
-const const unsigned char satellite[] PROGMEM = {
+static const unsigned char satellite[] PROGMEM = {
         B00000011,B11100000,
         B00000000,B00011000,
         B00000001,B11100100,

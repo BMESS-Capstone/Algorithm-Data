@@ -11,7 +11,7 @@ boolean switchSensor;
 // Algorithm
 // TESTED
 #include "algo.h"
-static algo ALGO = algo();
+algo ALGO = algo();
 
 // Communication case variable
 // 1 is wifi connection
@@ -25,33 +25,33 @@ int var = 1;
 #include "WifiCON.h"
 #include <WiFi.h>
 #include <HTTPClient.h>
-static const char *ssid = "NetworkName";
-static const char *password = "Password";
-static WifiCON WFCon;
+const char *ssid = "NetworkName";
+const char *password = "Password";
+WifiCON WFCon;
 
 // Cell Settings
 #include "CellCON.h"
-static const char *APN = "Some APN Settings";
-static const char *URL = "http://www.google.com";
-static const char *CONTENT_TYPE = "application/json";
-static CellCON CLCon;
+const char *APN = "Some APN Settings";
+const char *URL = "http://www.google.com";
+const char *CONTENT_TYPE = "application/json";
+CellCON CLCon;
 
 // Sat Settings
 #include "SatCON.h"
-static SatCON STCon;
+SatCON STCon;
 
 // Server Settings
-static const char *serverName = "the Server Address... Replace this";
+const char *serverName = "the Server Address... Replace this";
 
 // Change to false ***
-static bool initial = true;
-static bool RTCset = false;
+bool initial = true;
+bool RTCset = false;
 
 // Screen variables
 #include "screen.h"
-static Screen screen;
-static int oxyValue;
-static bool connBool[];
+Screen screen;
+int oxyValue;
+bool connBool[3];
 
 int StO2entry = 0;
 
