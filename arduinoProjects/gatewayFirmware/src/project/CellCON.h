@@ -19,7 +19,7 @@ class CellCON {
     void setupModule();
     boolean send(String message);
     std::vector<String> getTime();
-    std::vector<String> CellCON::split(String source, char delim);
+    std::vector<String> split(String source, char delim);
 
   private:
     SIM800L *sim800l;

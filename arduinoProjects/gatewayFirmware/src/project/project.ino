@@ -51,7 +51,7 @@ bool RTCset = false;
 #include "screen.h"
 Screen screen;
 int oxyValue;
-bool connBool[];
+bool connBool[3];
 
 int StO2entry = 0;
 
