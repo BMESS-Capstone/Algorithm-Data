@@ -1,5 +1,5 @@
 //Bluetooth
-#include "/Users/jeffroszell/Documents/School/Capstone/Algorithm-Data/arduinoProjects/parameters.h"
+#include "parameters.h"
 // #include "C:\Users\khaled.elmalawany1\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
 #include <NimBLEDevice.h>
 //The following variables need to be declared before #include "algo.h"
