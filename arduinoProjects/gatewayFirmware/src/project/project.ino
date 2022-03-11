@@ -9,6 +9,7 @@ boolean isUpdated;
 boolean switchSensor;
 
 // Algorithm
+// TESTED
 #include "algo.h"
 static algo ALGO = algo();
 
@@ -20,6 +21,7 @@ static algo ALGO = algo();
 int var = 1;
 
 // Wifi Settings
+// TESTED
 #include "WifiCON.h"
 #include <WiFi.h>
 #include <HTTPClient.h>
@@ -212,6 +214,7 @@ void setup()
   // Object of screen type
   screen = Screen(oxyValue,connBool);
 
+// This is where the RTC is setup
     while (RTCset == false) {
       // Add the RTC update here
       // hh:mm:ss
@@ -219,7 +222,7 @@ void setup()
         //set RTC using wifi
         std::vector<String> time = WFCon.getTime();
         // Just need the specifics to change time here...
-
+        
         RTCset = true;
       }
       else if (CLCon.connect() == true) {
@@ -315,12 +318,18 @@ LOOP:
         goto LOOP;
     } else {
 
-
+      // You may have to comment this out to test them
       // Go through normal procedure
-      String message = ALGO.fullLoop(deviceIndex, oxyValue);
-      Serial.println(message);
+      // String message = ALGO.fullLoop(deviceIndex, oxyValue);
+      // Serial.println(message);
+
+      oxyValue = 82;
+      connBool[0] = false;
+      connBool[1] = true;
+      connBool[2] = false;
+
       screen.showDisplay(oxyValue, connBool);
-      sendMessage(message);
+      // sendMessage(message);
 
     }
   } else {
