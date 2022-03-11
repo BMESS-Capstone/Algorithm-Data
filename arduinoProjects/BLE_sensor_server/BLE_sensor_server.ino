@@ -29,9 +29,7 @@
 #include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
 //#include "/home/pi/Documents/Algorithm-Data/arduinoProjects/parameters.h"
 
-#include <Wire.h>
-
-#include <SparkFun_AS7265X.h>
+#include "AS726X.h"
 AS726X sensor;
 float counter = 0.0;
 
@@ -60,7 +58,7 @@ long previousMillis = 0;
 void setup() {
   // initialize the built-in LED pin to indicate when a central is connected
   // Note: 4-pin RGB is common cathode
-  pinMode(A4, OUTPUT);
+  pinMode(LED_PIN_RED, OUTPUT);
   pinMode(LED_PIN_GREEN, OUTPUT);
   pinMode(LED_PIN_BLUE, OUTPUT);
   digitalWrite(LED_PIN_RED, OFF);
@@ -80,21 +78,13 @@ void setup() {
     while (1);
   }
 
-  //Once the sensor is started we can increase the I2C speed
-  Wire.setClock(400000);
-
-  // Note: AS7265X_MEASUREMENT_MODE_6CHAN_ONE_SHOT is the default
-  sensor.setMeasurementMode(AS7265X_MEASUREMENT_MODE_6CHAN_CONTINUOUS); //All 6 channels on all devices
+  // Note: Mode 2 - Continuous reading of all channels is the default
+  sensor.setMeasurementMode(2);
 
   //0-255 valid but 0 seems to cause the sensors to read very slowly
-  //(1+1)*2.8ms = 5.6ms per reading
+  //Using 1: (1+1)*2.8ms = 5.6ms per reading
   //But we need two integration cycles so 89Hz is aproximately the fastest read rate
-  sensor.setIntegrationCycles(1);
-
-  //Only turn on IR bulb
-  //IR on board is rated at 875 nm while standalone IR is rate at 940 nm
-  sensor.enableBulb(AS7265x_LED_IR);
-
+  sensor.setIntegrationTime(1);
 
   /* Set a local name for the BLE device
      This name will appear in advertising packets
@@ -160,8 +150,9 @@ void updateBatteryLevel() {
 }
 
 void readSensor() {
-  //Wait two integration cycles to get all values
-  while (sensor.dataAvailable() == false) {} //Do nothing
+  // Will turn on Bulb then turn it off to prevent overheating
+  // Will make sure that data is available
+  sensor.takeMeasurementsWithBulb();
 
   sensorValue[0] = sensor.getCalibratedU();
   sensorValue[1] = sensor.getCalibratedW();
