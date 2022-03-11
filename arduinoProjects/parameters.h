@@ -9,8 +9,8 @@
 #define LED_PIN_BLUE D5 //verified
 #define ON LOW
 #define OFF HIGH
-#define SDA_PIN 7 //verified with Arduino Nano 33 BLE PCB schematic
-#define SCL_PIN 8 //verified with Arduino Nano 33 BLE PCB schematic
+#define SDA_PIN 8 //verified with findI2C_PinsAndDevices.ino
+#define SCL_PIN 7 //verified with findI2C_PinsAndDevices.ino
 
 // Parameters only for Gateway
 #define ONBOARD_LED 2
