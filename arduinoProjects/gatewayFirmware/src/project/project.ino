@@ -213,6 +213,10 @@ void setup()
   STCon = SatCON();
   
   // Object of screen type
+  oxyValue = 82;
+  connBool[0] = false;
+  connBool[1] = true;
+  connBool[2] = false;
   screen = Screen(oxyValue, connBool);
 
   // This is where the RTC is setup
@@ -323,11 +327,6 @@ LOOP:
       // Go through normal procedure
       String message = ALGO.fullLoop(deviceIndex, oxyValue);
       Serial.println(message);
-
-      oxyValue = 82;
-      connBool[0] = false;
-      connBool[1] = true;
-      connBool[2] = false;
 
 //      screen.showDisplay(oxyValue, connBool);
       // sendMessage(message);
