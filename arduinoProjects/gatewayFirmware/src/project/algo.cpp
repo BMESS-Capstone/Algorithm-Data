@@ -56,7 +56,7 @@ boolean algo::calculateODdelta()
   return true;
 }
 
-BLA::Matrix<1, 2> algo::calcConc()
+void algo::calcConc()
 {
   // get the constant
   double frontCoeff = 1.0 / (sourceDetectorDistance);
@@ -121,7 +121,7 @@ String algo::fullLoop(int deviceLocation, int& oxyValue)
     {
       receiveUpdate();
       initial = false;
-      inputFilter();
+//      inputFilter();
       continue;
     }
 
@@ -133,7 +133,7 @@ String algo::fullLoop(int deviceLocation, int& oxyValue)
 
     // 3. Now you can start the normal loop
     // Preprocess
-    inputFilter();
+//    inputFilter();
 
     // 4. Calculate the oDChange and returns true if there is a change
     if (calculateODdelta()) {
@@ -190,11 +190,11 @@ String algo::getDateAndTime()
   return toReturn;
 }
 
-int algo::calcNewOxy(){
-    int sum = 0;
-    for(int i=0;i<20;i++){
-        sum+=outputStO2[i];
-    }
-    int average = sum/20;
-    return int(average);
+int algo::calcNewOxy() {
+  int sum = 0;
+  for (int i = 0; i < 20; i++) {
+    sum += outputStO2[i];
+  }
+  int average = sum / 20;
+  return int(average);
 }

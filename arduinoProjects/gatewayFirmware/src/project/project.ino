@@ -211,37 +211,38 @@ void setup()
   CLCon = CellCON(APN, URL, CONTENT_TYPE);
   WFCon = WifiCON(ssid, password, serverName);
   STCon = SatCON();
+  
   // Object of screen type
-  screen = Screen(oxyValue,connBool);
+  screen = Screen(oxyValue, connBool);
 
-// This is where the RTC is setup
-    while (RTCset == false) {
-      // Add the RTC update here
-      // hh:mm:ss
-      if (WFCon.connect() == true) {
-        //set RTC using wifi
-        std::vector<String> time = WFCon.getTime();
-        // Just need the specifics to change time here...
-        
-        RTCset = true;
-      }
-      else if (CLCon.connect() == true) {
-        //set RTC using cell
-        std::vector<String> time = CLCon.getTime();
-        // Just need the specifics to change time here...
-
-        RTCset = true;
-      }
-      else if (STCon.connect() == true) {
-        //set RTC using sat
-        std::vector<String> time = STCon.getTime();
-        // Just need the specifics to change time here...
-
-        RTCset = true;
-      }
-      else
-        continue;
-    }
+  // This is where the RTC is setup
+//  while (RTCset == false) {
+//    // Add the RTC update here
+//    // hh:mm:ss
+//    if (WFCon.connect() == true) {
+//      //set RTC using wifi
+//      std::vector<String> time = WFCon.getTime();
+//      // Just need the specifics to change time here...
+//
+//      RTCset = true;
+//    }
+//    else if (CLCon.connect() == true) {
+//      //set RTC using cell
+//      std::vector<String> time = CLCon.getTime();
+//      // Just need the specifics to change time here...
+//
+//      RTCset = true;
+//    }
+//    else if (STCon.connect() == true) {
+//      //set RTC using sat
+//      std::vector<String> time = STCon.getTime();
+//      // Just need the specifics to change time here...
+//
+//      RTCset = true;
+//    }
+//    else
+//      continue;
+//  }
 
   //BLE setup
   pinMode(ONBOARD_LED, OUTPUT);
@@ -320,15 +321,15 @@ LOOP:
 
       // You may have to comment this out to test them
       // Go through normal procedure
-      // String message = ALGO.fullLoop(deviceIndex, oxyValue);
-      // Serial.println(message);
+      String message = ALGO.fullLoop(deviceIndex, oxyValue);
+      Serial.println(message);
 
       oxyValue = 82;
       connBool[0] = false;
       connBool[1] = true;
       connBool[2] = false;
 
-      screen.showDisplay(oxyValue, connBool);
+//      screen.showDisplay(oxyValue, connBool);
       // sendMessage(message);
 
     }
@@ -349,30 +350,30 @@ LOOP:
 
 
 void sendMessage(String message) {
-    // We could add an if statement here
-    // if(haveConnection == true)
-    // { try to send all the old messages }
-    if (WFCon.connect() == true) {
-        var = 2;
-        connBool[0] = true;
-        connBool[1] = false;
-        connBool[2] = false;
-    } else if (CLCon.connect() == true) {
-        var = 3;
-        connBool[0] = false;
-        connBool[1] = true;
-        connBool[2] = false;
-    } else if (STCon.connect() == true) {
-        var = 4;
-        connBool[0] = false;
-        connBool[1] = false;
-        connBool[2] = true;
-    } else {
-        var = 1;
-        connBool[0] = false;
-        connBool[1] = false;
-        connBool[2] = false;
-    }
+  // We could add an if statement here
+  // if(haveConnection == true)
+  // { try to send all the old messages }
+  if (WFCon.connect() == true) {
+    var = 2;
+    connBool[0] = true;
+    connBool[1] = false;
+    connBool[2] = false;
+  } else if (CLCon.connect() == true) {
+    var = 3;
+    connBool[0] = false;
+    connBool[1] = true;
+    connBool[2] = false;
+  } else if (STCon.connect() == true) {
+    var = 4;
+    connBool[0] = false;
+    connBool[1] = false;
+    connBool[2] = true;
+  } else {
+    var = 1;
+    connBool[0] = false;
+    connBool[1] = false;
+    connBool[2] = false;
+  }
 
   switch (var) {
     case 2:

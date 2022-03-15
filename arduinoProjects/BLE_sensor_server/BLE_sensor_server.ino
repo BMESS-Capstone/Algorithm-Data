@@ -56,6 +56,8 @@ int oldBatteryLevel = 0;
 long previousMillis = 0;
 
 void setup() {
+  delay(1000);
+  
   // initialize the built-in LED pin to indicate when a central is connected
   // Note: 4-pin RGB is common cathode
   pinMode(LED_PIN_RED, OUTPUT);

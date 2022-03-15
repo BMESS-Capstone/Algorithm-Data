@@ -3,6 +3,7 @@
 
 #include <SIM800L.h>
 #include <SoftwareSerial.h>
+#include <vector>
 
 #define SIM800_RST_PIN 6
 

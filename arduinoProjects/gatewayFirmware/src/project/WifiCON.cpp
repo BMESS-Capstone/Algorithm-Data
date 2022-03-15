@@ -29,7 +29,7 @@ boolean WifiCON::connect() {
   Serial.println(ssid);
   WiFi.begin(ssid, password);
   int counter = 0;
-  while (WiFi.status() != WL_CONNECTED && counter<20) {
+  while (WiFi.status() != WL_CONNECTED && counter < 20) {
     delay(500);
     Serial.print(".");
   }
@@ -105,29 +105,29 @@ std::vector<String> WifiCON::getTime() {
   Serial.println(formattedTime);
 
   // Return the time to be added
-  return split(formattedTime,':');
+  return split(formattedTime, ':');
 }
 
-std::vector<String> WifiCON::split(String source, char delim){ 
+std::vector<String> WifiCON::split(String source, char delim) {
 
-std::vector<String> result = std::vector<String>();
+  std::vector<String> result = std::vector<String>();
 
-int ind1;
-int ind2;
-String hours;
-String minutes;
-String seconds;
+  int ind1;
+  int ind2;
+  String hours;
+  String minutes;
+  String seconds;
 
 
-ind1 = source.indexOf(delim);
-hours = source.substring(0,ind1);
-ind2 = source.indexOf(delim, ind1+1);
-minutes = source.substring(ind1+1, ind2);
-seconds = source.substring(ind2+1);
+  ind1 = source.indexOf(delim);
+  hours = source.substring(0, ind1);
+  ind2 = source.indexOf(delim, ind1 + 1);
+  minutes = source.substring(ind1 + 1, ind2);
+  seconds = source.substring(ind2 + 1);
 
-result.push_back(hours);
-result.push_back(minutes);
-result.push_back(seconds);
+  result.push_back(hours);
+  result.push_back(minutes);
+  result.push_back(seconds);
 
-return result;
+  return result;
 }

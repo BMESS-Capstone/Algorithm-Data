@@ -6,8 +6,8 @@
 #include <BasicLinearAlgebra.h>
 #include <ctime>
 
-#include "/Users/jeffroszell/Documents/School/Capstone/Algorithm-Data/arduinoProjects/parameters.h"
-// #include "C:\Users\khaled.elmalawany1\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
+//#include "/Users/jeffroszell/Documents/School/Capstone/Algorithm-Data/arduinoProjects/parameters.h"
+#include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
 
 class algo {
   public:
@@ -71,7 +71,7 @@ class algo {
 
     boolean calculateODdelta();
 
-    BLA::Matrix<1, 2> calcConc();
+    void calcConc();
 
     void updateOutput();
 
