@@ -40,9 +40,9 @@ void Screen::displayConn(){
 
     if (connections[0] == true)       // connected to wifi
         display1.drawBitmap(out_loc[0],out_loc[1], wifi, 20, 16, 1);
-    else if (this->connections[1] == true)  // connected to satellite
+    else if (connections[1] == true)  // connected to satellite
         display1.drawBitmap(out_loc[0],out_loc[1], satellite, 16, 20, 1);
-    else if (this->connections[2] == true)  // connected to cellular
+    else if (connections[2] == true)  // connected to cellular
         display1.drawBitmap(out_loc[0],out_loc[1], cellular, 16, 16, 1);
 
     // displays each connected bluetooth
