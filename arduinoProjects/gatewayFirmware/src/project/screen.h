@@ -122,19 +122,15 @@ class Screen {
   public:
     // Constructor
     Screen();
-    Screen(int& value, bool connBools[]);
 
     // The display refresher
-    void showDisplay(int value, bool bools[]);
+    void showDisplay();
 
     // Each part of the display
-    void displayOxy(int value);
+    void displayOxy();
     void displayBattery();
     void displayConn();
   private:
-    bool connections [3];
-    int in;
-    int life;
     Adafruit_SSD1306 display1;
 };
 

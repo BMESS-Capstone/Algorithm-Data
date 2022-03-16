@@ -206,6 +206,7 @@ boolean connectToServer(std::string device) {
 void setup()
 {
   Serial.begin(115200);
+  Serial.println("0");
 
   // Objects of each connection type
   CLCon = CellCON(APN, URL, CONTENT_TYPE);
@@ -217,7 +218,8 @@ void setup()
   connBool[0] = false;
   connBool[1] = true;
   connBool[2] = false;
-  screen = Screen(oxyValue, connBool);
+  Serial.println("1");
+  screen = Screen();
 
   // This is where the RTC is setup
 //  while (RTCset == false) {
@@ -249,8 +251,10 @@ void setup()
 //  }
 
   //BLE setup
+  Serial.println("2");
   pinMode(ONBOARD_LED, OUTPUT);
 
+  Serial.println("3");
   BLEDevice::init("pIRfusiX Gateway");
 
   isUpdated = false;
@@ -261,6 +265,7 @@ void setup()
   pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
   pBLEScan->setActiveScan(true);
   pBLEScan->start(0, false);
+  Serial.println("5");
 }
 
 void loop()
@@ -325,10 +330,10 @@ LOOP:
 
       // You may have to comment this out to test them
       // Go through normal procedure
-      String message = ALGO.fullLoop(deviceIndex, oxyValue);
+      String message = ALGO.fullLoop(deviceIndex);
       Serial.println(message);
 
-//      screen.showDisplay(oxyValue, connBool);
+      screen.showDisplay();
       // sendMessage(message);
 
     }

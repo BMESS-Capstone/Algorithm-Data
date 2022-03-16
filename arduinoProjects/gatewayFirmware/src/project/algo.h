@@ -79,7 +79,7 @@ class algo {
 
     void currentToLast();
 
-    String fullLoop(int deviceLocation, int& oxyValue);
+    String fullLoop(int deviceLocation);
 
     // Helper for the date and time
     String getDateAndTime();

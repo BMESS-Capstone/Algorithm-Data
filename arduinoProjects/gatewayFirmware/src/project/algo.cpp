@@ -7,6 +7,7 @@ extern float sensorValue[SENSOR_DATA_LENGTH];
 extern int batteryValue;
 extern boolean isUpdated;
 extern boolean switchSensor;
+extern int oxyValue;
 int tripcounter = 0;
 
 algo::algo() {
@@ -106,7 +107,7 @@ void algo::currentToLast()
     lastIntensityArray[i] = currentIntensityArray[i];
 }
 
-String algo::fullLoop(int deviceLocation, int& oxyValue)
+String algo::fullLoop(int deviceLocation)
 {
   String output = "{";
   String tripID = "\"tripID\" : ";
@@ -127,7 +128,6 @@ String algo::fullLoop(int deviceLocation, int& oxyValue)
 
     // 2. First Reading needs to go to the current intensity,
     // and shift readings to the last
-
     currentToLast();
     receiveUpdate(); // should pull one set of measurements
 
@@ -145,8 +145,10 @@ String algo::fullLoop(int deviceLocation, int& oxyValue)
 
       // 7. Concatenates the results into a single string
       values += String(outputStO2[StO2entry]) + ", ";
-    } else
+    } else {
       values += String(previousStO2Value) + ", ";
+
+    }
 
     // 8. Add timestamps to the output (hh:mm:ss)
     times += (getDateAndTime() + ", ");
