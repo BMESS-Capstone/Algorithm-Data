@@ -8,6 +8,8 @@ Screen::Screen() {}
 
 Screen::Screen(int& value, bool connBools[]){
 
+    display1 = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
     // Initialize variables
     connections[0] = connBools[0];
     connections[1] = connBools[1];

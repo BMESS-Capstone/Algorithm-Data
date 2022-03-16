@@ -349,9 +349,6 @@ LOOP:
 
 
 void sendMessage(String message) {
-  // We could add an if statement here
-  // if(haveConnection == true)
-  // { try to send all the old messages }
   if (WFCon.connect() == true) {
     var = 2;
     connBool[0] = true;

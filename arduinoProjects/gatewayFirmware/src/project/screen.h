@@ -135,7 +135,7 @@ class Screen {
     bool connections [3];
     int in;
     int life;
-    Adafruit_SSD1306 display1 = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+    Adafruit_SSD1306 display1;
 };
 
 #endif //ARDUINOPROJECTS_SCREEN_H
