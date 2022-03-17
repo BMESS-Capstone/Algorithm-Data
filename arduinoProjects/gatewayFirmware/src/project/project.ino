@@ -8,11 +8,6 @@ int batteryValue;
 boolean isUpdated;
 boolean switchSensor;
 
-// Algorithm
-// TESTED
-#include "algo.h"
-algo ALGO = algo();
-
 // Communication case variable
 // 1 is wifi connection
 // 2 is cell connection
@@ -48,8 +43,6 @@ bool initial = true;
 bool RTCset = false;
 
 // Screen variables
-#include "screen.h"
-Screen screen;
 int oxyValue;
 bool connBool[3];
 
@@ -202,6 +195,15 @@ boolean connectToServer(std::string device) {
 }
 
 //********************Standard Code Block***************************
+
+// Position of these includes matter due to extern in respective cpp file
+#include "algo.h"
+#include "screen.h"
+
+// Algorithm and Screen Object Definition
+// TESTED
+Screen screen;
+algo ALGO = algo();
 
 void setup()
 {
