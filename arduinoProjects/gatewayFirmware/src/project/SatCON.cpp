@@ -11,18 +11,7 @@ boolean SatCON::connect() {
 
   // Start the console serial port
   Serial.begin(115200);
-  while (!Serial); // Wait for the user to open the serial monitor
-  Serial.println(F("Iridium SBD Time I2C"));
-
-  //empty the serial buffer
-  while (Serial.available() > 0) Serial.read();
-
-  //wait for the user to press any key before beginning
-  Serial.println(F("Press any key to start example."));
-  while (Serial.available() == 0);
-
-  //clean up
-  while (Serial.available() > 0) Serial.read();
+ 
 
   // Start the I2C wire port connected to the satellite modem
   Wire.begin();
@@ -36,13 +25,11 @@ boolean SatCON::connect() {
   }
 
   // Enable the supercapacitor charger
-  Serial.println(F("Enabling the supercapacitor charger..."));
   modem.enableSuperCapCharger(true);
 
   // Wait for the supercapacitor charger PGOOD signal to go high
   while (!modem.checkSuperCapCharger())
   {
-    Serial.println(F("Waiting for supercapacitors to charge..."));
     delay(1000);
   }
   Serial.println(F("Supercapacitors charged!"));
@@ -52,7 +39,6 @@ boolean SatCON::connect() {
   modem.enable9603Npower(true);
 
   // Begin satellite modem operation
-  Serial.println(F("Starting modem..."));
   modem.setPowerProfile(IridiumSBD::USB_POWER_PROFILE); // Assume 'USB' power (slow recharge)
   err = modem.begin();
   if (err != ISBD_SUCCESS)
@@ -61,6 +47,27 @@ boolean SatCON::connect() {
     Serial.println(err);
     if (err == ISBD_NO_MODEM_DETECTED)
       Serial.println(F("No modem detected: check wiring."));
+  }
+  //check maximum 5 times that satellite has proper connectivity
+  uint8_t sig = 0;
+  for(int i = 0; i<5; i++){
+    err = modem.getSignalQuality(signalQuality);
+    if (signalQuality>=2){
+      sig = 1;
+      break;
+    }
+ 
+    if (err != ISBD_SUCCESS)
+    {
+      Serial.print(F("SignalQuality failed: error "));
+      Serial.println(err);
+      return;
+    }
+    delay(1000);
+  }
+  if (sig !=1){
+//connection never established, signal too weak
+
   }
 
   return modem.isConnected();
