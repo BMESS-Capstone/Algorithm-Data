@@ -1,7 +1,9 @@
 #ifndef SDHandler_h
 #define SDHandler_h
 
-
+#include <SPI.h>
+#include <SD.h>
+#include "FS.h"
 
 
 //LEFT TO DO: 
@@ -20,6 +22,7 @@ class SDHandler{
  
     void write2SD(unsigned char* message, uint8_t index); //this is what actually writes to the SD
 
-    void initializeCard(void);
+    bool initializeCard(void);
 
 };
+#endif

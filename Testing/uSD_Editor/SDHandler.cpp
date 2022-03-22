@@ -1,12 +1,10 @@
-#include SDHandler_h
+#include "SDHandler.h"
 
-#include <SPI.h>
-#include <SD.h>
-#include "FS.h"
+
 
 extern boolean SDFlag;
 
-//IF TIME PERMITS, ADD THE OPTION OF CHANGIN FILE NAME
+//To be called on powerup... configures pins for SD card
   SDHandler::SDHandler(){
   pinMode(chipSelect, OUTPUT);
   pinMode(cardDetect, INPUT);  
@@ -44,23 +42,23 @@ void SDHandler::write2SD(unsigned char* message, uint8_t index){
     fd.write('@'); //delimiter for parsing
     fd.flush(); 
     fd.close();
-    SDFlag = True; 
+    SDFlag = true; 
   }
   else{
     //Serial.println("Failed to open file");
-    SDFlag = False;
+    SDFlag = false;
   }
     
 }
 
 
-void SDHandler::initializeCard(void)
+bool SDHandler::initializeCard(void)
 {
   Serial.print(F("Initializing SD card..."));
   
   if(!SD.begin(25)){
     Serial.println("Card Mount Failed"); //card is not recognized .. check connection
-    return;
+    return false;
   }
   
   // Card seems to exist.  begin() returns failure
@@ -75,7 +73,5 @@ void SDHandler::initializeCard(void)
     alreadyBegan = true;
   }
   Serial.println(F("Initialization done."));
-
+  return true;
 }
-
-

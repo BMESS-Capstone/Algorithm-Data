@@ -46,10 +46,6 @@ bool RTCset = false;
 int oxyValue;
 bool connBool[3];
 
-// RTC settings
-#include "RTChandler.h"
-RTChandler RTC;
-
 int StO2entry = 0;
 
 //***********Bluetooth Global Variables, Classes and Functions*******************
@@ -228,34 +224,33 @@ void setup()
   screen = Screen();
 
   // This is where the RTC is setup
-  RTC = RTChandler();
-  while (RTCset == false) {
-    // Add the RTC update here
-    // hh:mm:ss
-    if (WFCon.connect() == true) {
-      //set RTC using wifi
-      std::vector<String> time = WFCon.getTime();
-      // Just need the specifics to change time here...
-      RTC.setTime(time);
-      RTCset = true;
-    }
-    else if (CLCon.connect() == true) {
-      //set RTC using cell
-      std::vector<String> time = CLCon.getTime();
-      // Just need the specifics to change time here...
-      RTC.setTime(time);
-      RTCset = true;
-    }
-    else if (STCon.connect() == true) {
-      //set RTC using sat
-      std::vector<String> time = STCon.getTime();
-      // Just need the specifics to change time here...
-      RTC.setTime(time);
-      RTCset = true;
-    }
-    else
-      continue;
-  }
+//  while (RTCset == false) {
+//    // Add the RTC update here
+//    // hh:mm:ss
+//    if (WFCon.connect() == true) {
+//      //set RTC using wifi
+//      std::vector<String> time = WFCon.getTime();
+//      // Just need the specifics to change time here...
+//
+//      RTCset = true;
+//    }
+//    else if (CLCon.connect() == true) {
+//      //set RTC using cell
+//      std::vector<String> time = CLCon.getTime();
+//      // Just need the specifics to change time here...
+//
+//      RTCset = true;
+//    }
+//    else if (STCon.connect() == true) {
+//      //set RTC using sat
+//      std::vector<String> time = STCon.getTime();
+//      // Just need the specifics to change time here...
+//
+//      RTCset = true;
+//    }
+//    else
+//      continue;
+//  }
 
   //BLE setup
   Serial.println("2");
@@ -396,6 +391,7 @@ void sendMessage(String message) {
       break;
 
     case 4:
+    
       STCon.send(message);
       STCon.disconnect();
       break;
