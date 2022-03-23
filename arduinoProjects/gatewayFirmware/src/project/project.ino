@@ -27,7 +27,7 @@ WifiCON WFCon;
 // Cell Settings
 #include "CellCON.h"
 const char *APN = "Some APN Settings";
-const char *URL = "http://www.google.com";
+const char *URL = "https://pirfusix-solutions.herokuapp.com/tripdata/postSat";
 const char *CONTENT_TYPE = "application/json";
 CellCON CLCon;
 
@@ -36,7 +36,7 @@ CellCON CLCon;
 SatCON STCon;
 
 // Server Settings
-const char *serverName = "the Server Address... Replace this";
+const char *serverName = "https://pirfusix-solutions.herokuapp.com/tripdata/postSat";
 
 // Change to false ***
 bool initial = true;
