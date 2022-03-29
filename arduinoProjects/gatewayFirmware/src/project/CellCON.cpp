@@ -23,6 +23,8 @@ boolean CellCON::connect() {
 
   // Initialize SIM800L driver with an internal buffer of 200 bytes and a reception buffer of 512 bytes, debug disabled
   sim800l = new SIM800L((Stream *)&Serial1, SIM800_RST_PIN, 200, 512);
+  if (sim800l == nullptr)
+    return false;
 
   // Setup module for GPRS communication
   setupModule();

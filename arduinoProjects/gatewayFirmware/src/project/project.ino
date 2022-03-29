@@ -15,13 +15,17 @@ boolean switchSensor;
 // Default is no connection
 int var = 1;
 
+// RTC Settings
+#include "RTChandler.h"
+RTChandler rtc;
+
 // Wifi Settings
 // TESTED
 #include "WifiCON.h"
 #include <WiFi.h>
 #include <HTTPClient.h>
-const char *ssid = "NetworkName";
-const char *password = "Password";
+const char *ssid = "elmal’s iPhone";
+const char *password = "qwasedrt";
 WifiCON WFCon;
 
 // Cell Settings
@@ -36,7 +40,7 @@ CellCON CLCon;
 SatCON STCon;
 
 // Server Settings
-const char *serverName = "the Server Address... Replace this";
+const char *serverName = "https://pirfusix-solutions.herokuapp.com/tripdata/testTripData"; 
 
 // Change to false ***
 bool initial = true;
@@ -198,65 +202,69 @@ boolean connectToServer(std::string device) {
 
 // Position of these includes matter due to extern in respective cpp file
 #include "algo.h"
-#include "screen.h"
+//#include "screen.h"
 
 // Algorithm and Screen Object Definition
 // TESTED
-Screen screen;
+//Screen screen;
 algo ALGO = algo();
 
 void setup()
 {
   Serial.begin(115200);
-  Serial.println("0");
 
+  // RTC setup
+  rtc = RTChandler();
+//  rtc.setupRTC();
+  
   // Objects of each connection type
   CLCon = CellCON(APN, URL, CONTENT_TYPE);
   WFCon = WifiCON(ssid, password, serverName);
   STCon = SatCON();
   
-  // Object of screen type
-  oxyValue = 82;
-  connBool[0] = false;
-  connBool[1] = true;
-  connBool[2] = false;
-  Serial.println("1");
-  screen = Screen();
+//  // Object of screen type
+//  oxyValue = 82;
+//  connBool[0] = false;
+//  connBool[1] = true;
+//  connBool[2] = false;
+//  screen = Screen();
 
   // This is where the RTC is setup
-//  while (RTCset == false) {
-//    // Add the RTC update here
-//    // hh:mm:ss
-//    if (WFCon.connect() == true) {
-//      //set RTC using wifi
-//      std::vector<String> time = WFCon.getTime();
-//      // Just need the specifics to change time here...
-//
-//      RTCset = true;
-//    }
+  while (RTCset == false) {
+    // Add the RTC update here
+    // hh:mm:ss
+    if (WFCon.connect() == true) {
+      //set RTC using wifi
+      std::vector<String> time = WFCon.getTime();
+//      rtc.setTime(time);
+      WFCon.send("{ \"id\": \"12345\", \"test_string\": \"tes1\"}");
+      // Just need the specifics to change time here...
+
+      RTCset = true;
+    }
 //    else if (CLCon.connect() == true) {
 //      //set RTC using cell
 //      std::vector<String> time = CLCon.getTime();
+//      rtc.setTime(time);
 //      // Just need the specifics to change time here...
 //
 //      RTCset = true;
 //    }
-//    else if (STCon.connect() == true) {
-//      //set RTC using sat
-//      std::vector<String> time = STCon.getTime();
-//      // Just need the specifics to change time here...
-//
-//      RTCset = true;
-//    }
-//    else
-//      continue;
-//  }
+    else if (STCon.connect() == true) {
+      //set RTC using sat
+      std::vector<String> time = STCon.getTime();
+      rtc.setTime(time);
+      // Just need the specifics to change time here...
+
+      RTCset = true;
+    }
+    else
+      continue;
+  }
 
   //BLE setup
-  Serial.println("2");
   pinMode(ONBOARD_LED, OUTPUT);
 
-  Serial.println("3");
   BLEDevice::init("pIRfusiX Gateway");
 
   isUpdated = false;
@@ -267,7 +275,6 @@ void setup()
   pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
   pBLEScan->setActiveScan(true);
   pBLEScan->start(0, false);
-  Serial.println("5");
 }
 
 void loop()
@@ -332,12 +339,11 @@ LOOP:
 
       // You may have to comment this out to test them
       // Go through normal procedure
-      String message = ALGO.fullLoop(deviceIndex);
+      String message = ALGO.fullLoop(deviceIndex, rtc.getTime());
       Serial.println(message);
 
-      screen.showDisplay();
-      // sendMessage(message);
-
+//      screen.showDisplay();
+      sendMessage(message);
     }
   } else {
     if (connectionCounter > TOTAL_POSSIBLE_LOCATIONS + 1) {
@@ -361,12 +367,15 @@ void sendMessage(String message) {
     connBool[0] = true;
     connBool[1] = false;
     connBool[2] = false;
-  } else if (CLCon.connect() == true) {
-    var = 3;
-    connBool[0] = false;
-    connBool[1] = true;
-    connBool[2] = false;
-  } else if (STCon.connect() == true) {
+  } 
+//  else if (CLCon.connect() == true) {
+//    std::vector<String> time = CLCon.getTime();
+//    var = 3;
+//    connBool[0] = false;
+//    connBool[1] = true;
+//    connBool[2] = false;
+//  } 
+  else if (STCon.connect() == true) {
     var = 4;
     connBool[0] = false;
     connBool[1] = false;
@@ -382,7 +391,6 @@ void sendMessage(String message) {
     case 2:
       // Send the message
       WFCon.send(message);
-      WFCon.disconnect();
       break;
 
     case 3:
@@ -391,7 +399,6 @@ void sendMessage(String message) {
       break;
 
     case 4:
-    
       STCon.send(message);
       STCon.disconnect();
       break;

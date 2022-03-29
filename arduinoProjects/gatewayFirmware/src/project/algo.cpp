@@ -107,7 +107,7 @@ void algo::currentToLast()
     lastIntensityArray[i] = currentIntensityArray[i];
 }
 
-String algo::fullLoop(int deviceLocation)
+String algo::fullLoop(int deviceLocation, String rtcTime)
 {
   String output = "{";
   String tripID = "\"tripID\" : ";
@@ -151,7 +151,7 @@ String algo::fullLoop(int deviceLocation)
     }
 
     // 8. Add timestamps to the output (hh:mm:ss)
-    times += (getDateAndTime() + ", ");
+    times += (rtcTime + ", ");
 
     StO2entry++;
   }

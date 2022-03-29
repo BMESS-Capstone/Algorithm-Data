@@ -32,13 +32,19 @@ boolean WifiCON::connect() {
   while (WiFi.status() != WL_CONNECTED && counter < 20) {
     delay(500);
     Serial.print(".");
+    counter++;
   }
-  // Print local IP address and start web server
-  Serial.println("");
-  Serial.println("WiFi connected.");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
-  return true;
+  if (WiFi.status() == WL_CONNECTED) {
+    // Print local IP address and start web server
+    Serial.println("");
+    Serial.println("WiFi connected.");
+    Serial.println("IP address: ");
+    Serial.println(WiFi.localIP());
+    return true;
+  } else {
+    Serial.println("WiFi not connected.");
+    return false;
+  }
 }
 
 boolean WifiCON::disconnect() {

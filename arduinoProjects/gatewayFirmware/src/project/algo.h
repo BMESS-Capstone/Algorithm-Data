@@ -7,7 +7,8 @@
 #include <ctime>
 
 //#include "/Users/jeffroszell/Documents/School/Capstone/Algorithm-Data/arduinoProjects/parameters.h"
-// #include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
+//#include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
+#include "parameters.h"
 
 class algo {
   public:
@@ -18,7 +19,7 @@ class algo {
     int StO2entry = 0;
 
     // TODO: Change this when I know a real value (max value of the sensor)
-    const float incidentIntensity = 750;
+    const float incidentIntensity = 200;
 
     // These are the storage for the intensities and the intermediates
     // Initialize the arrays
@@ -79,7 +80,7 @@ class algo {
 
     void currentToLast();
 
-    String fullLoop(int deviceLocation);
+    String fullLoop(int deviceLocation, String rtcTime);
 
     // Helper for the date and time
     String getDateAndTime();
