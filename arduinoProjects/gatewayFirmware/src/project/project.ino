@@ -41,7 +41,7 @@ SatCON STCon;
 
 // Server Settings
 const char *serverNameWifi ="https://pirfusix-solutions.herokuapp.com/trips/postWifi"; 
-const char *serverNameSat = "https://pirfusix-solutions.herokuapp.com/tripdata/postSat";
+const char *serverNameSat = "https://pirfusix-solutions.herokuapp.com/trips/postSat";
 
 // Change to false ***
 bool initial = true;
