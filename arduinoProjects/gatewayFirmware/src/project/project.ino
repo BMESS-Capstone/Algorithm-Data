@@ -40,7 +40,7 @@ CellCON CLCon;
 SatCON STCon;
 
 // Server Settings
-const char *serverNameWifi = "https://pirfusix-solutions.herokuapp.com/tripdata/testTripData"; 
+const char *serverNameWifi ="https://pirfusix-solutions.herokuapp.com/trips/postWifi"; 
 const char *serverNameSat = "https://pirfusix-solutions.herokuapp.com/tripdata/postSat";
 
 // Change to false ***
@@ -50,6 +50,9 @@ bool RTCset = false;
 // Screen variables
 int oxyValue;
 bool connBool[3];
+
+// Trip Variable
+int tripcounter = 6;
 
 int StO2entry = 0;
 
@@ -220,7 +223,7 @@ void setup()
   
   // Objects of each connection type
   CLCon = CellCON(APN, URL, CONTENT_TYPE);
-  WFCon = WifiCON(ssid, password, serverName);
+  WFCon = WifiCON(ssid, password, serverNameWifi);
   STCon = SatCON();
   
 //  // Object of screen type
@@ -388,19 +391,26 @@ void sendMessage(String message) {
     connBool[2] = false;
   }
 
+  //Prepare JSON for each connection
+  String wifiJSON = "{\"dataID\": \"0\",\"tripID\": \"0\",\"data\":" + message + "}";
+
+  String satJSON = message;
+
+
   switch (var) {
     case 2:
       // Send the message
-      WFCon.send(message);
+      WFCon.send(wifiJSON);
+      WFCon.disconnect();
       break;
 
-    case 3:
-      CLCon.send(message);
-      CLCon.disconnect();
-      break;
+    // case 3:
+    //   CLCon.send(message);
+    //   CLCon.disconnect();
+    //   break;
 
     case 4:
-      STCon.send(message);
+      STCon.send(satJSON);
       STCon.disconnect();
       break;
 

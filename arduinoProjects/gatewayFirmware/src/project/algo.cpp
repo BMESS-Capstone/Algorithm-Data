@@ -8,7 +8,8 @@ extern int batteryValue;
 extern boolean isUpdated;
 extern boolean switchSensor;
 extern int oxyValue;
-int tripcounter = 0;
+extern int tripcounter;
+String hcn = "55555555";
 
 algo::algo() {
   for (int i = 0; i < SENSOR_DATA_LENGTH; i++) {
@@ -109,12 +110,10 @@ void algo::currentToLast()
 
 String algo::fullLoop(int deviceLocation, String rtcTime)
 {
-  String output = "{";
-  String tripID = "\"tripID\" : ";
-  String location = " \"DeviceLocation\" : [";
-  String values = " \"Values\" : [";
-  String times = " \"Times\" : [";
-  String battPerc = " \"BatteryPercentage\" : [";
+  String output = "";
+  String values = "";
+  String times = "";
+
   while (StO2entry < SENSOR_READINGS)
   {
     // 1. Read first two inputs and chuck them off a cliff
@@ -144,9 +143,9 @@ String algo::fullLoop(int deviceLocation, String rtcTime)
       updateOutput();
 
       // 7. Concatenates the results into a single string
-      values += String(outputStO2[StO2entry]) + ", ";
+      values += String(outputStO2[StO2entry]) + ",";
     } else {
-      values += String(previousStO2Value) + ", ";
+      values += String(previousStO2Value) + ",";
 
     }
 
@@ -157,18 +156,24 @@ String algo::fullLoop(int deviceLocation, String rtcTime)
   }
   // Makes the JSON string
   StO2entry = 0;
-  output += location + String(deviceLocation) + ", ";
-  output += "], ";
-  output += tripID + String(tripcounter) + ", ";
+
+  // get rid of end commas
+  values.remove(values.length() - 1);
+  times.remove(times.length() - 1);
+
+  output += String(tripcounter);
+  output += ";";
+  output += hcn;
+  output += ";[";
   output += values;
-  output += "], ";
+  output += "];[";
   output += times;
-  output += "], ";
-  output += battPerc + String(batteryValue) + ", ";
-  output += "]}";
+  output += "]";
+
 
   switchSensor = true;
-  tripcounter++;
+  // TODO: implement the end of trip if there is time
+  // tripcounter++;
 
   //Update display value
   oxyValue = calcNewOxy();
