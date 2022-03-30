@@ -241,7 +241,6 @@ void setup()
       //set RTC using wifi
       std::vector<String> time = WFCon.getTime();
 //      rtc.setTime(time);
-      WFCon.send("{ \"id\": \"12345\", \"test_string\": \"tes1\"}");
       // Just need the specifics to change time here...
 
       RTCset = true;
@@ -343,8 +342,8 @@ LOOP:
 
       // You may have to comment this out to test them
       // Go through normal procedure
-      String message = ALGO.fullLoop(deviceIndex, rtc.getTime());
-      Serial.println(message);
+      String message = ALGO.fullLoop(deviceIndex, "");
+//      Serial.println(message);
 
 //      screen.showDisplay();
       sendMessage(message);
@@ -392,7 +391,8 @@ void sendMessage(String message) {
   }
 
   //Prepare JSON for each connection
-  String wifiJSON = "{\"dataID\": \"0\",\"tripID\": \"0\",\"data\":" + message + "}";
+  String wifiJSON = "\"dataID\": \"0\",\"tripID\": \"0\",\"data\":" + message;
+  Serial.println(wifiJSON);
 
   String satJSON = message;
 
@@ -401,7 +401,6 @@ void sendMessage(String message) {
     case 2:
       // Send the message
       WFCon.send(wifiJSON);
-      WFCon.disconnect();
       break;
 
     // case 3:
