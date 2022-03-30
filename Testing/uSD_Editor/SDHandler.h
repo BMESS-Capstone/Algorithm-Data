@@ -23,6 +23,7 @@ class SDHandler{
     void write2SD(unsigned char* message, uint8_t index); //this is what actually writes to the SD
 
     bool initializeCard(void);
+    
 
 };
 #endif
