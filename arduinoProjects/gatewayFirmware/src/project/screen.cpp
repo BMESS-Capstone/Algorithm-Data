@@ -9,9 +9,10 @@ extern bool connBool[3];
 extern int batteryValue;
 extern int oxyValue;
 
-Screen::Screen(){
+Screen::Screen(){}
 
-    display1 = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+void Screen::init() {
+  display1 = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
     // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
     if(!display1.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
@@ -78,16 +79,16 @@ void Screen::displayOxy() {
 }
 
 void Screen::showDisplay() {
-    Serial.println("Displaying battery");
+//    Serial.println("Displaying battery");
     displayBattery();
-    Serial.println("Displaying conn");
+//    Serial.println("Displaying conn");
     displayConn();
-    Serial.println("Displaying value");
+//    Serial.println("Displaying value");
     displayOxy();
-    Serial.println("Displaying display");
+//    Serial.println("Displaying display");
     display1.display();
-    Serial.println("Displaying delay");
+//    Serial.println("Displaying delay");
     delay(400);
-    Serial.println("Displaying clear");
+//    Serial.println("Displaying clear");
     display1.clearDisplay();
 }

@@ -206,11 +206,11 @@ boolean connectToServer(std::string device) {
 
 // Position of these includes matter due to extern in respective cpp file
 #include "algo.h"
-//#include "screen.h"
+#include "screen.h"
 
 // Algorithm and Screen Object Definition
 // TESTED
-//Screen screen;
+Screen screen = Screen();;
 algo ALGO = algo();
 
 void setup()
@@ -226,12 +226,12 @@ void setup()
   WFCon = WifiCON(ssid, password, serverNameWifi);
   STCon = SatCON();
   
-//  // Object of screen type
-//  oxyValue = 82;
-//  connBool[0] = false;
-//  connBool[1] = true;
-//  connBool[2] = false;
-//  screen = Screen();
+  // Object of screen type
+  oxyValue = 82;
+  connBool[0] = false;
+  connBool[1] = true;
+  connBool[2] = false;
+  screen.init();
 
   // This is where the RTC is setup
   while (RTCset == false) {
@@ -256,7 +256,7 @@ void setup()
     else if (STCon.connect() == true) {
       //set RTC using sat
       std::vector<String> time = STCon.getTime();
-      rtc.setTime(time);
+//      rtc.setTime(time);
       // Just need the specifics to change time here...
 
       RTCset = true;
@@ -343,9 +343,8 @@ LOOP:
       // You may have to comment this out to test them
       // Go through normal procedure
       String message = ALGO.fullLoop(deviceIndex, "");
-//      Serial.println(message);
 
-//      screen.showDisplay();
+      screen.showDisplay();
       sendMessage(message);
     }
   } else {
@@ -392,7 +391,8 @@ void sendMessage(String message) {
 
   //Prepare JSON for each connection
   String wifiJSON = "\"dataID\": \"0\",\"tripID\": \"0\",\"data\":" + message;
-  Serial.println(wifiJSON);
+  Serial.println(message);
+  Serial.println(var);
 
   String satJSON = message;
 

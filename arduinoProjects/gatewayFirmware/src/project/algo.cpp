@@ -177,6 +177,7 @@ String algo::fullLoop(int deviceLocation, String rtcTime)
 
   //Update display value
   oxyValue = calcNewOxy();
+  Serial.println(oxyValue);
 
   // Returns the String which is SENSOR_READINGS readings
   return output;
