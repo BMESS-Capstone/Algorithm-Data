@@ -199,10 +199,10 @@ String algo::getDateAndTime()
 }
 
 int algo::calcNewOxy() {
-  int sum = 0;
-  for (int i = 0; i < 20; i++) {
+  float sum = 0;
+  for (int i = 0; i < SENSOR_READINGS; i++) {
     sum += outputStO2[i];
   }
-  int average = sum / 20;
+  float average = sum / float(SENSOR_READINGS);
   return int(average);
 }
