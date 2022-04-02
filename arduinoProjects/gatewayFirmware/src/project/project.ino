@@ -24,8 +24,8 @@ RTChandler rtc;
 #include "WifiCON.h"
 #include <WiFi.h>
 #include <HTTPClient.h>
-const char *ssid = "elmal’s iPhone";
-const char *password = "qwasedrt";
+const char *ssid = "iPhone";
+const char *password = "ujbgh3c9atjhj";
 WifiCON WFCon;
 
 // Cell Settings
@@ -234,36 +234,37 @@ void setup()
   screen.init();
 
   // This is where the RTC is setup
-  while (RTCset == false) {
-    // Add the RTC update here
-    // hh:mm:ss
-    if (WFCon.connect() == true) {
-      //set RTC using wifi
-      std::vector<String> time = WFCon.getTime();
-//      rtc.setTime(time);
-      // Just need the specifics to change time here...
-
-      RTCset = true;
-    }
-//    else if (CLCon.connect() == true) {
-//      //set RTC using cell
-//      std::vector<String> time = CLCon.getTime();
-//      rtc.setTime(time);
+//  while (RTCset == false) {
+//    // Add the RTC update here
+//    // hh:mm:ss
+//    if (WFCon.connect() == true) {
+//      //set RTC using wifi
+//      std::vector<String> time = WFCon.getTime();
+////      rtc.setTime(time);
 //      // Just need the specifics to change time here...
 //
 //      RTCset = true;
 //    }
-    else if (STCon.connect() == true) {
-      //set RTC using sat
-      std::vector<String> time = STCon.getTime();
-//      rtc.setTime(time);
-      // Just need the specifics to change time here...
-
-      RTCset = true;
-    }
-    else
-      continue;
-  }
+////    else if (CLCon.connect() == true) {
+////      //set RTC using cell
+////      std::vector<String> time = CLCon.getTime();
+////      rtc.setTime(time);
+////      // Just need the specifics to change time here...
+////
+////      RTCset = true;
+////    }
+//    else if (STCon.connect() == true) {
+//      //set RTC using sat
+//      std::vector<String> time = STCon.getTime();
+////      rtc.setTime(time);
+//      STCon.disconnect();
+//      // Just need the specifics to change time here...
+//
+//      RTCset = true;
+//    }
+//    else
+//      continue;
+//  }
 
   //BLE setup
   pinMode(ONBOARD_LED, OUTPUT);
@@ -387,6 +388,7 @@ void sendMessage(String message) {
     connBool[0] = false;
     connBool[1] = false;
     connBool[2] = false;
+    Serial.println("Nothing Connected");
   }
 
   //Prepare JSON for each connection
@@ -419,6 +421,8 @@ void sendMessage(String message) {
       // have bool that tracks whether we couldn't find signal
       // bool haveConnection = false;
       // If we want more lights and sirens, put them here
+      STCon.disconnect();
+
   }
 }
 //*******************End of Code Block******************************
