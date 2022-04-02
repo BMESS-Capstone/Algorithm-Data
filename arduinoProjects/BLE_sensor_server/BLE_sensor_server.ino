@@ -26,7 +26,7 @@
 */
 
 #include <ArduinoBLE.h>
-#include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
+#include "C:\Users\randy\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
 //#include "/home/pi/Documents/Algorithm-Data/arduinoProjects/parameters.h"
 
 #include "AS726X.h"
