@@ -7,8 +7,7 @@ time = [];
 x = 0;
 for i = 1:1377
     time(end+1) = i*0.5;
-end 
-
+end
 
 figure; 
 plot(time,U, '*r'); 

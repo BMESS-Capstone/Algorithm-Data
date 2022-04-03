@@ -40,12 +40,11 @@ CellCON CLCon;
 SatCON STCon;
 
 // Server Settings
-const char *serverNameWifi ="https://pirfusix-solutions.herokuapp.com/trips/postWifi"; 
+const char *serverNameWifi = "https://pirfusix-solutions.herokuapp.com/trips/postWifi";
 const char *serverNameSat = "https://pirfusix-solutions.herokuapp.com/trips/postSat";
 
 // Change to false ***
 bool initial = true;
-bool RTCset = false;
 
 // Screen variables
 float oxyValue;
@@ -56,12 +55,11 @@ int tripcounter = 6;
 
 int StO2entry = 0;
 
-//SD Card Variable 
+//SD Card Variable
 #include "SDHandler.h"
 extern boolean SDFlag = false;
 
 SDHandler mySD;
-
 
 //***********Bluetooth Global Variables, Classes and Functions*******************
 /* UUID's of the service, characteristic that we want to read and/or write */
@@ -83,6 +81,7 @@ boolean moreThanOneSensor = false;
 uint8_t connectionCounter = 0;
 uint8_t deviceIndex = 0;
 uint8_t brockenDevicesCounter = 0;
+boolean connectedDevices[TOTAL_POSSIBLE_LOCATIONS];
 
 //Advertised device of the peripheral device. Address will be found during scanning...
 static BLEAdvertisedDevice *myDevice;
@@ -98,6 +97,7 @@ static void notifyCallback(BLERemoteCharacteristic *pBLERemoteCharacteristic, ui
     if (pBLERemoteCharacteristic->getUUID().toString() == sensorCharacteristicUUID) {
       for (int i = 0; i < SENSOR_DATA_LENGTH; i++) {
         sensorValue[i] = *(float *)(pData + i * sizeof(float));
+        Serial.println(sensorValue[i]);
       }
 
       isUpdated = true;
@@ -189,8 +189,10 @@ boolean connectToServer(std::string device) {
   }
 
   if (!isConnectionComplete) {
-    if (myDevices[batteryValue] == "")
+    if (myDevices[batteryValue] == "") {
       myDevices[batteryValue] = myDevice->getAddress().toString();
+      connectedDevices[batteryValue] = true;
+    }
     else {
       Serial.println("2 sensors have the same location value");
       while (1) {
@@ -226,13 +228,18 @@ void setup()
 
   // RTC setup
   rtc = RTChandler();
-//  rtc.setupRTC();
-  
+  //  rtc.setupRTC();
+
+  // Connected Devices setup
+  for (int i = 0; i < TOTAL_POSSIBLE_LOCATIONS; ++i) {
+    connectedDevices[i] = false;
+  }
+
   // Objects of each connection type
   CLCon = CellCON(APN, URL, CONTENT_TYPE);
   WFCon = WifiCON(ssid, password, serverNameWifi);
   STCon = SatCON();
-  
+
   // Object of screen type
   oxyValue = 82;
   connBool[0] = false;
@@ -241,37 +248,27 @@ void setup()
   screen.init();
 
   // This is where the RTC is setup
-//  while (RTCset == false) {
-//    // Add the RTC update here
-//    // hh:mm:ss
-//    if (WFCon.connect() == true) {
-//      //set RTC using wifi
-//      std::vector<String> time = WFCon.getTime();
-////      rtc.setTime(time);
-//      // Just need the specifics to change time here...
-//
-//      RTCset = true;
-//    }
-////    else if (CLCon.connect() == true) {
-////      //set RTC using cell
-////      std::vector<String> time = CLCon.getTime();
-////      rtc.setTime(time);
-////      // Just need the specifics to change time here...
-////
-////      RTCset = true;
-////    }
-//    else if (STCon.connect() == true) {
-//      //set RTC using sat
-//      std::vector<String> time = STCon.getTime();
-////      rtc.setTime(time);
-//      STCon.disconnect();
-//      // Just need the specifics to change time here...
-//
-//      RTCset = true;
-//    }
-//    else
-//      continue;
-//  }
+  // Add the RTC update here
+  // hh:mm:ss
+  if (WFCon.connect() == true) {
+    //set RTC using wifi
+    std::vector<String> time = WFCon.getTime();
+    //      rtc.setTime(time);
+    // Just need the specifics to change time here...
+  }
+  //    else if (CLCon.connect() == true) {
+  //      //set RTC using cell
+  //      std::vector<String> time = CLCon.getTime();
+  //      rtc.setTime(time);
+  //      // Just need the specifics to change time here...
+  //    }
+  else if (STCon.connect() == true) {
+    //set RTC using sat
+    std::vector<String> time = STCon.getTime();
+    //      rtc.setTime(time);
+    STCon.disconnect();
+    // Just need the specifics to change time here...
+  }
 
   //BLE setup
   pinMode(ONBOARD_LED, OUTPUT);
@@ -377,14 +374,14 @@ void sendMessage(String message) {
     connBool[0] = true;
     connBool[1] = false;
     connBool[2] = false;
-  } 
-//  else if (CLCon.connect() == true) {
-//    std::vector<String> time = CLCon.getTime();
-//    var = 3;
-//    connBool[0] = false;
-//    connBool[1] = true;
-//    connBool[2] = false;
-//  } 
+  }
+  //  else if (CLCon.connect() == true) {
+  //    std::vector<String> time = CLCon.getTime();
+  //    var = 3;
+  //    connBool[0] = false;
+  //    connBool[1] = true;
+  //    connBool[2] = false;
+  //  }
   else if (STCon.connect() == true) {
     var = 4;
     connBool[0] = false;
@@ -408,7 +405,7 @@ void sendMessage(String message) {
 
   //save data to SD Card
   message.toCharArray(buffer, 160);
-  Serial.println(message); 
+  Serial.println(message);
   mySD.write2SD((unsigned char *)buffer, 160);
 
   switch (var) {

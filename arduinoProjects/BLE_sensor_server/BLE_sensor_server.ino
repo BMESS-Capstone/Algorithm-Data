@@ -33,7 +33,7 @@
 AS726X sensor;
 float counter = 0.0;
 
-int location = LEFT_ARM;
+int location = RIGHT_ARM;
 
 // BLE Service (NOTE: Consider moving into setup() to reduce dynamic memory)
 BLEService sensorService(CONNECT_UUID);
