@@ -24,8 +24,8 @@ RTChandler rtc;
 #include "WifiCON.h"
 #include <WiFi.h>
 #include <HTTPClient.h>
-const char *ssid = "iPhone";
-const char *password = "ujbgh3c9atjhj";
+const char *ssid = "elmal’s iPhone";
+const char *password = "qwasedrt";
 WifiCON WFCon;
 
 // Cell Settings
@@ -56,9 +56,8 @@ int tripcounter = 6;
 int StO2entry = 0;
 
 //SD Card Variable
+boolean SDFlag = false;
 #include "SDHandler.h"
-extern boolean SDFlag = false;
-
 SDHandler mySD;
 
 //***********Bluetooth Global Variables, Classes and Functions*******************
@@ -97,7 +96,6 @@ static void notifyCallback(BLERemoteCharacteristic *pBLERemoteCharacteristic, ui
     if (pBLERemoteCharacteristic->getUUID().toString() == sensorCharacteristicUUID) {
       for (int i = 0; i < SENSOR_DATA_LENGTH; i++) {
         sensorValue[i] = *(float *)(pData + i * sizeof(float));
-        Serial.println(sensorValue[i]);
       }
 
       isUpdated = true;
@@ -241,10 +239,6 @@ void setup()
   STCon = SatCON();
 
   // Object of screen type
-  oxyValue = 82;
-  connBool[0] = false;
-  connBool[1] = true;
-  connBool[2] = false;
   screen.init();
 
   // This is where the RTC is setup
@@ -349,8 +343,8 @@ LOOP:
       // Go through normal procedure
       String message = ALGO.fullLoop(deviceIndex, "");
 
-      screen.showDisplay();
       sendMessage(message);
+      screen.showDisplay();
     }
   } else {
     if (connectionCounter > TOTAL_POSSIBLE_LOCATIONS + 1) {
@@ -397,16 +391,16 @@ void sendMessage(String message) {
 
   //Prepare JSON for each connection
   String wifiJSON = "\"dataID\": \"0\",\"tripID\": \"0\",\"data\":" + message;
-  Serial.println(message);
-  Serial.println(var);
+  Serial.println(wifiJSON);
 
   String satJSON = message;
-  char buffer[154];
-
+  
+  char buffer[160];
   //save data to SD Card
   message.toCharArray(buffer, 160);
   Serial.println(message);
   mySD.write2SD((unsigned char *)buffer, 160);
+  delay(10);
 
   switch (var) {
     case 2:

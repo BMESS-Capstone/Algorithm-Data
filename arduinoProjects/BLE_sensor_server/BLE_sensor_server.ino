@@ -26,7 +26,7 @@
 */
 
 #include <ArduinoBLE.h>
-#include "C:\Users\randy\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
+#include "C:\Users\elmal\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
 //#include "/home/pi/Documents/Algorithm-Data/arduinoProjects/parameters.h"
 
 #include "AS726X.h"
@@ -56,6 +56,7 @@ int oldBatteryLevel = 0;
 long previousMillis = 0;
 
 void setup() {
+//  Serial.println(9600);
   delay(1000);
   
   // initialize the built-in LED pin to indicate when a central is connected
@@ -158,4 +159,7 @@ void readSensor() {
 
   sensorValue[0] = sensor.getCalibratedU();
   sensorValue[1] = sensor.getCalibratedW();
+//  Serial.println(sensorValue[0]);
+//  Serial.println(sensorValue[1]);
+//  Serial.println();
 }

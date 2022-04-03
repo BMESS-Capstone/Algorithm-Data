@@ -98,8 +98,9 @@ void algo::receiveUpdate()
     delay(1);
   isUpdated = false;
 
-  for (int i = 0; i < SENSOR_DATA_LENGTH ; i++)
+  for (int i = 0; i < SENSOR_DATA_LENGTH ; i++) {
     currentIntensityArray[i] = sensorValue[i];
+  }
 }
 
 void algo::currentToLast()
@@ -177,7 +178,6 @@ String algo::fullLoop(int deviceLocation, String rtcTime)
 
   //Update display value
   oxyValue = calcNewOxy();
-  Serial.println(oxyValue);
 
   // Returns the String which is SENSOR_READINGS readings
   return output;

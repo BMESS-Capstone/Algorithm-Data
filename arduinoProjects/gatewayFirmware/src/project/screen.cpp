@@ -8,6 +8,7 @@ extern boolean connectedDevices[TOTAL_POSSIBLE_LOCATIONS];
 extern bool connBool[3];
 extern int batteryValue;
 extern float oxyValue;
+extern uint8_t deviceIndex;
 
 Screen::Screen() {}
 
@@ -45,15 +46,11 @@ void Screen::displayConn() {
     display1.drawBitmap(out_loc[0], out_loc[1], cellular, 16, 16, 1);
 
   // displays each connected bluetooth
-  for (int i = 0; i < TOTAL_POSSIBLE_LOCATIONS; i++) {
-    if (connectedDevices[i]) {
-      display1.drawBitmap(in_loc[0] - i * 20, in_loc[1], bluetooth, 13, 20, 1);
-      display1.setTextSize(1);
-      display1.setTextColor(WHITE);
-      display1.setCursor(in_loc[0] - i * 20 + 14, in_loc[1] + 12);
-      display1.println(i + 1);
-    }
-  }
+  display1.drawBitmap(in_loc[0] - deviceIndex * 20, in_loc[1], bluetooth, 13, 20, 1);
+  display1.setTextSize(1);
+  display1.setTextColor(WHITE);
+  display1.setCursor(in_loc[0] - deviceIndex * 20 + 14, in_loc[1] + 12);
+  display1.println(deviceIndex + 1);
 }
 
 void Screen::displayOxy() {
