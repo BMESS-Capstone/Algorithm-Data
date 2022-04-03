@@ -46,6 +46,7 @@ void Screen::displayConn(){
 
     // displays each connected bluetooth
     Serial.println("Testing bluetooth");
+    Serial.println(connectionCounter);
     for (int i=0; i < connectionCounter; i++){
         display1.drawBitmap(in_loc[0] - i*20, in_loc[1], bluetooth, 13, 20, 1);
         display1.setTextSize(1);

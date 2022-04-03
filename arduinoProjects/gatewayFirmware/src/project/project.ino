@@ -56,6 +56,13 @@ int tripcounter = 6;
 
 int StO2entry = 0;
 
+//SD Card Variable 
+#include "SDHandler.h"
+extern boolean SDFlag = false;
+
+SDHandler mySD;
+
+
 //***********Bluetooth Global Variables, Classes and Functions*******************
 /* UUID's of the service, characteristic that we want to read and/or write */
 // BLE Services
@@ -397,7 +404,12 @@ void sendMessage(String message) {
   Serial.println(var);
 
   String satJSON = message;
+  char buffer[154];
 
+  //save data to SD Card
+  message.toCharArray(buffer, 160);
+  Serial.println(message); 
+  mySD.write2SD((unsigned char *)buffer, 160);
 
   switch (var) {
     case 2:
