@@ -48,7 +48,7 @@ bool initial = true;
 bool RTCset = false;
 
 // Screen variables
-int oxyValue;
+float oxyValue;
 bool connBool[3];
 
 // Trip Variable

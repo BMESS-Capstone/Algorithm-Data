@@ -7,7 +7,7 @@ extern float sensorValue[SENSOR_DATA_LENGTH];
 extern int batteryValue;
 extern boolean isUpdated;
 extern boolean switchSensor;
-extern int oxyValue;
+extern float oxyValue;
 extern int tripcounter;
 String hcn = "55555555";
 
@@ -198,11 +198,11 @@ String algo::getDateAndTime()
   return toReturn;
 }
 
-int algo::calcNewOxy() {
+float algo::calcNewOxy() {
   float sum = 0;
   for (int i = 0; i < SENSOR_READINGS; i++) {
     sum += outputStO2[i];
   }
   float average = sum / float(SENSOR_READINGS);
-  return int(average);
+  return average;
 }

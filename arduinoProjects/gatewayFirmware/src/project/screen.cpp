@@ -7,7 +7,7 @@
 extern uint8_t connectionCounter;
 extern bool connBool[3];
 extern int batteryValue;
-extern int oxyValue;
+extern float oxyValue;
 
 Screen::Screen(){}
 
