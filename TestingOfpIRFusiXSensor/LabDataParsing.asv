@@ -21,12 +21,12 @@ legend("760nm (Hhb)", "860nm (O2Hb)", "Occlusion", "Reperfusion");
 
 StO2_sensor = algo(U, W);
 figure; 
-plot(time,StO2_sensor, 'blu'); 
+plot(time,StO2_sensor, '*r'); 
 hold on
-title("Pr0cessed Spectral Intensity by pIRfusiX Sensor during Occlusion Testing");
+title("Prcessed Spectral Intensity by pIRfusiX Sensor during Occlusion Testing");
 xlabel("seconds");
-xline(130, 'red', "--");
-xline(420, 'green', "--");
+xline(130, 'red', "*");
+xline(420, 'green', "*");
 legend("StO2", "Occlusion", "Reperfusion"); 
 
 
@@ -51,16 +51,6 @@ xline(130, '--r');
 xline(410, '--g');
 legend("Hhb (DeOxy)", "O2Hb (Oxy)", 'Occlusion (280mmHg)', 'Reperfusion');
 
-StO2_lab = algo(Hhb, O2Hb);
-figure; 
-plot(time1,StO2_lab, 'blu'); 
-hold on
-title("Processed Spectral Intensity by Portamon during Occlusion Testing");
-xlabel("seconds");
-xline(130, '--red');
-xline(420, '--green');
-legend("StO2", "Occlusion", "Reperfusion"); 
-
 %lowpass filtering
 num = 1/10*[1 1 1 1 1 1 1 1 1 1];
 den = [1];
@@ -72,7 +62,7 @@ W_filt = filter(num, den, W);
 figure; 
 plot(time,U_filt, 'r'); 
 hold on
-plot(time,W_filt, '*blu'); 
+plot(time,W_filt, 'blu'); 
 title("Filtered Spectral Intensity Recieved by pIRfusiX Sensor during Occlusion Testing");
 xlabel("seconds");
 ylabel("microW/cm^2");

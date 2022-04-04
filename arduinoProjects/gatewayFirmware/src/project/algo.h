@@ -19,7 +19,7 @@ class algo {
     int StO2entry = 0;
 
     // TODO: Change this when I know a real value (max value of the sensor)
-    const float incidentIntensity = 200;
+    const float incidentIntensity = 30;
 
     // These are the storage for the intensities and the intermediates
     // Initialize the arrays
