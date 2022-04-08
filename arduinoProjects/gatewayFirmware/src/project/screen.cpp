@@ -16,7 +16,7 @@ void Screen::init() {
   display1 = Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
-  if (!display1.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+  if (!display1.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
     Serial.println(F("SSD1306 allocation failed"));
     for (;;); // Don't proceed, loop forever
   }
@@ -88,5 +88,17 @@ void Screen::showDisplay() {
   //Serial.println("Displaying delay");
   delay(400);
   //Serial.println("Displaying clear");
+  display1.clearDisplay();
+}
+
+
+void Screen::showUserDisplay(String userText) {
+  display1.setTextColor(WHITE);
+  display1.setTextSize(1);
+  display1.setCursor(0, 0);
+  display1.println(userText);
+  display1.drawBitmap((SCREEN_WIDTH - LOGO_WIDTH) / 2, (SCREEN_HEIGHT - LOGO_HEIGHT) / 2 + 8, logo_data, LOGO_WIDTH, LOGO_HEIGHT, 1);
+  display1.display();
+  delay(400);
   display1.clearDisplay();
 }

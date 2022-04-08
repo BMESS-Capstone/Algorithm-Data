@@ -11,7 +11,7 @@ class RTChandler {
   public:
     RTChandler();
 
-    void setupRTC();
+    boolean setupRTC();
     void setTime(std::vector<String> components);
     String getTime();
 

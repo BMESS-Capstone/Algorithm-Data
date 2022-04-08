@@ -14,6 +14,8 @@ String formattedTime;
 String dayStamp;
 String timeStamp;
 
+extern Screen screen;
+
 WifiCON::WifiCON() {}
 
 WifiCON::WifiCON(const char *ssid, const char *password, const char *serverName) {
@@ -25,6 +27,8 @@ WifiCON::WifiCON(const char *ssid, const char *password, const char *serverName)
 boolean WifiCON::connect() {
   // Initialize Serial Monitor
   //Serial.begin(115200);
+  screen.showUserDisplay("Testing WiFi");
+  
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.begin(ssid, password);
@@ -36,10 +40,11 @@ boolean WifiCON::connect() {
   }
   if (WiFi.status() == WL_CONNECTED) {
     // Print local IP address and start web server
-    Serial.println("");
+    Serial.println();
     Serial.println("WiFi connected.");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
+    screen.showUserDisplay("WiFi Connected");
     return true;
   } else {
     Serial.println("WiFi not connected.");

@@ -82,6 +82,10 @@ class algo {
 
     String fullLoop(int deviceLocation, String rtcTime);
 
+    float convert();
+
+    float get_coefficient(int wav, String hb_type);
+
     // Helper for the date and time
     String getDateAndTime();
 

@@ -122,7 +122,7 @@ String algo::fullLoop(int deviceLocation, String rtcTime)
     {
       receiveUpdate();
       initial = false;
-//      inputFilter();
+      //      inputFilter();
       continue;
     }
 
@@ -133,7 +133,7 @@ String algo::fullLoop(int deviceLocation, String rtcTime)
 
     // 3. Now you can start the normal loop
     // Preprocess
-//    inputFilter();
+    //    inputFilter();
 
     // 4. Calculate the oDChange and returns true if there is a change
     if (calculateODdelta()) {
@@ -181,6 +181,41 @@ String algo::fullLoop(int deviceLocation, String rtcTime)
 
   // Returns the String which is SENSOR_READINGS readings
   return output;
+}
+
+// Developed from: https://github.com/KaunilD/mes2hb/blob/master/mes2hb/mes2hb.py
+float algo::convert() {
+  // HbWave = 760 & Hb02Wave = 860
+  // U_Wave = 35.74+32.90+33.48+30.06+36.65+30.61+29.95 & W_Wave = 39.05+36.46+34.43+41.05+40.53+35.13+31.34
+  float U_Wave_baseline = 29.95;
+  float W_Wave_baseline = 31.34;
+}
+
+// Developed from: https://github.com/KaunilD/mes2hb/blob/a4406ec444b51612392f62c2933a53a41b0cf07f/mes2hb/absorption_coefficients.py
+float algo::get_coefficient(int wav, String hb_type) {
+  int l_wav = floor(wav);
+  int u_wav = l_wav + 1;
+  float l_coef, u_coef;
+
+  if (hb_type == "oxy") {
+    if (wav == HbWave) {
+      l_coef = 0.1495594;
+      u_coef = 0.1504855;
+    } else {
+      l_coef = 0.2611131;
+      u_coef = 0.2620623;
+    }
+  } else if (hb_type == "dxy") {
+    if (wav == HbWave) {
+      l_coef = 0.3865221;
+      u_coef = 0.3849846;
+    } else if (wav == Hb02Wave) {
+      l_coef = 0.1823647;
+      u_coef = 0.1827244;
+    }
+  }
+
+  return (u_coef - l_coef) / (u_wav - l_wav) * (wav - l_wav) + l_coef;
 }
 
 // Helper for the date and time

@@ -155,10 +155,10 @@ std::vector<String> CellCON::getTime() {
   // Hour starts on 9 and second ends on 16
   String toReturn = mystr.substring(9, 16);
 
-  return split(toReturn,':');
+  return split(toReturn, ':');
 }
 
-std::vector<String> CellCON::split(String source, char delim){ 
+std::vector<String> CellCON::split(String source, char delim) {
 
   std::vector<String> result = std::vector<String>();
 
@@ -170,10 +170,10 @@ std::vector<String> CellCON::split(String source, char delim){
 
 
   ind1 = source.indexOf(delim);
-  hours = source.substring(0,ind1);
-  ind2 = source.indexOf(delim, ind1+1);
-  minutes = source.substring(ind1+1, ind2);
-  seconds = source.substring(ind2+1);
+  hours = source.substring(0, ind1);
+  ind2 = source.indexOf(delim, ind1 + 1);
+  minutes = source.substring(ind1 + 1, ind2);
+  seconds = source.substring(ind2 + 1);
 
   result.push_back(hours);
   result.push_back(minutes);

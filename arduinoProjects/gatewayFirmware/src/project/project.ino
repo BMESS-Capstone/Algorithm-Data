@@ -1,3 +1,7 @@
+//EEPROM
+#include <EEPROM.h>
+#define EEPROM_ADDR 0
+
 //Bluetooth
 #include "parameters.h"
 // #include "C:\Users\khaled.elmalawany1\Documents\GitHub\Algorithm-Data\arduinoProjects\parameters.h"
@@ -18,6 +22,7 @@ int var = 1;
 // RTC Settings
 #include "RTChandler.h"
 RTChandler rtc;
+boolean isRTCset = false;
 
 // Wifi Settings
 // TESTED
@@ -51,7 +56,7 @@ float oxyValue;
 bool connBool[3];
 
 // Trip Variable
-int tripcounter = 6;
+int tripcounter;
 
 int StO2entry = 0;
 
@@ -97,7 +102,6 @@ static void notifyCallback(BLERemoteCharacteristic *pBLERemoteCharacteristic, ui
       for (int i = 0; i < SENSOR_DATA_LENGTH; i++) {
         sensorValue[i] = *(float *)(pData + i * sizeof(float));
       }
-
       isUpdated = true;
     } else
       batteryValue = *(int *)pData;
@@ -224,22 +228,46 @@ void setup()
 {
   Serial.begin(115200);
 
-  // RTC setup
-  rtc = RTChandler();
-  //  rtc.setupRTC();
+  // Object of screen type
+  screen.init();
+  delay(3000);
+  //Initialize button
+  pinMode(BUTTON_PIN, INPUT);
+
+  screen.showUserDisplay("Initiate Data Saving and Transmission");
+  Serial.println("Awaiting User Input");
+  while (!digitalRead(BUTTON_PIN)) {}
+
+  // Tripcounter setup
+  if (!EEPROM.begin(sizeof(tripcounter)))
+    screen.showUserDisplay("EEPROM Failed");
+  tripcounter = readIntFromEEPROM(EEPROM_ADDR);
+  ++tripcounter;
+  writeIntoEEPROM(EEPROM_ADDR, tripcounter);
+  EEPROM.commit();
+
+  // Tripcounter User Feedback
+  String tripString = "Trip Number: " + String(tripcounter);
+  screen.showUserDisplay(tripString);
+  delay(1000);
 
   // Connected Devices setup
   for (int i = 0; i < TOTAL_POSSIBLE_LOCATIONS; ++i) {
     connectedDevices[i] = false;
   }
 
+  // RTC setup
+  screen.showUserDisplay("Setting Up RTC");
+  rtc = RTChandler();
+  if (rtc.setupRTC()) {
+    isRTCset = true;
+  }
+  screen.showUserDisplay("RTC Time Stored: " + rtc.getTime());
+
   // Objects of each connection type
   CLCon = CellCON(APN, URL, CONTENT_TYPE);
   WFCon = WifiCON(ssid, password, serverNameWifi);
   STCon = SatCON();
-
-  // Object of screen type
-  screen.init();
 
   // This is where the RTC is setup
   // Add the RTC update here
@@ -247,7 +275,9 @@ void setup()
   if (WFCon.connect() == true) {
     //set RTC using wifi
     std::vector<String> time = WFCon.getTime();
-    //      rtc.setTime(time);
+    if (isRTCset)
+      rtc.setTime(time);
+
     // Just need the specifics to change time here...
   }
   //    else if (CLCon.connect() == true) {
@@ -259,7 +289,8 @@ void setup()
   else if (STCon.connect() == true) {
     //set RTC using sat
     std::vector<String> time = STCon.getTime();
-    //      rtc.setTime(time);
+//    if (isRTCset)
+//      rtc.setTime(time);
     STCon.disconnect();
     // Just need the specifics to change time here...
   }
@@ -267,6 +298,7 @@ void setup()
   //BLE setup
   pinMode(ONBOARD_LED, OUTPUT);
 
+  screen.showUserDisplay("Locating Sensors");
   BLEDevice::init("pIRfusiX Gateway");
 
   isUpdated = false;
@@ -341,7 +373,13 @@ LOOP:
 
       // You may have to comment this out to test them
       // Go through normal procedure
-      String message = ALGO.fullLoop(deviceIndex, "");
+      String message;
+      if (isRTCset)
+        message = ALGO.fullLoop(deviceIndex, rtc.getTime());
+      else
+        message = ALGO.fullLoop(deviceIndex, "");
+
+      //Serial.println(message);
 
       sendMessage(message);
       screen.showDisplay();
@@ -390,15 +428,16 @@ void sendMessage(String message) {
   }
 
   //Prepare JSON for each connection
-  String wifiJSON = "\"dataID\": \"0\",\"tripID\": \"0\",\"data\":" + message;
+  String wifiJSON =  message;
+  //  "\"dataID\": \"0\",\"tripID\": \"0\",\"data\":" +
   Serial.println(wifiJSON);
 
   String satJSON = message;
-  
+
   char buffer[160];
   //save data to SD Card
   message.toCharArray(buffer, 160);
-  Serial.println(message);
+  //Serial.println(message);
   mySD.write2SD((unsigned char *)buffer, 160);
   delay(10);
 
@@ -424,8 +463,22 @@ void sendMessage(String message) {
       // have bool that tracks whether we couldn't find signal
       // bool haveConnection = false;
       // If we want more lights and sirens, put them here
-      STCon.disconnect();
-
   }
+}
+
+void writeIntoEEPROM(int address, int number)
+{
+  EEPROM.write(address, (number >> 24) & 0xFF);
+  EEPROM.write(address + 1, (number >> 16) & 0xFF);
+  EEPROM.write(address + 2, (number >> 8) & 0xFF);
+  EEPROM.write(address + 3, number & 0xFF);
+}
+
+long readIntFromEEPROM(int address)
+{
+  return ((int)EEPROM.read(address) << 24) +
+         ((int)EEPROM.read(address + 1) << 16) +
+         ((int)EEPROM.read(address + 2) << 8) +
+         (int)EEPROM.read(address + 3);
 }
 //*******************End of Code Block******************************

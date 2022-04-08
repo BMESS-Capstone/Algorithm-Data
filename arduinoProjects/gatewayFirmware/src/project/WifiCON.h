@@ -2,6 +2,7 @@
 #define WifiCON_h
 
 #include <Arduino.h>
+#include "screen.h"
 #include <vector>
 
 class WifiCON {
